@@ -6950,6 +6950,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: d0c8bff756eb229499f2b3a6290a5588, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1407621851}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: d0c8bff756eb229499f2b3a6290a5588, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1407621852}
   m_SourcePrefab: {fileID: 100100000, guid: d0c8bff756eb229499f2b3a6290a5588, type: 3}
 --- !u!1 &1327514950
 GameObject:
@@ -7389,6 +7392,22 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1.0977175, y: 2.2689464, z: 0.28591552}
   m_Center: {x: -0.5488541, y: 1.1344732, z: 0.0000005066395}
+--- !u!114 &1407621852
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1165798600}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 654d71a999d73dd4cb3bb98687000f43, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  doorTransform: {fileID: 1407621848}
+  isOpen: 0
+  openAngle: 90
+  animationSpeed: 3
 --- !u!1001 &1408837973
 PrefabInstance:
   m_ObjectHideFlags: 0
