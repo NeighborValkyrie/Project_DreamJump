@@ -126,7 +126,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c008145e5bd1dc647929f61c88ee1f2c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  pools: []
+  pools:
+  - tag: ItemEffect
+    prefab: {fileID: 0}
+    size: 5
+  - tag: CheckpointEffect
+    prefab: {fileID: 0}
+    size: 3
 --- !u!114 &327396239290238618
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -139,7 +145,43 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 660e75a0fef6adb45a8f0d5da257930b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sounds: []
+  sounds:
+  - name: TitleBGM
+    clip: {fileID: 8300000, guid: dc77ee7fdb083be4ca471c3addf0cb9a, type: 3}
+    volume: 0.5
+    pitch: 0.1
+    loop: 1
+    source: {fileID: 0}
+  - name: GameBGM
+    clip: {fileID: 8300000, guid: 5e6396d4e52b7df45b52c2f64690839d, type: 3}
+    volume: 0.5
+    pitch: 0
+    loop: 1
+    source: {fileID: 0}
+  - name: UIClick
+    clip: {fileID: 8300000, guid: 65e31025d792eaf4c9bcb7378c619993, type: 3}
+    volume: 0.8
+    pitch: 0
+    loop: 0
+    source: {fileID: 0}
+  - name: ItemCollect
+    clip: {fileID: 8300000, guid: 156d7be9d63eef644933d64e63ed8216, type: 3}
+    volume: 1
+    pitch: 0
+    loop: 0
+    source: {fileID: 0}
+  - name: Jump
+    clip: {fileID: 8300000, guid: 94b48bdaec34c8045a92b2af3c3683e8, type: 3}
+    volume: 0.7
+    pitch: 0
+    loop: 0
+    source: {fileID: 0}
+  - name: Checkpoint
+    clip: {fileID: 8300000, guid: afbf66e1b5a2a6d42b9afab65c5de815, type: 3}
+    volume: 1
+    pitch: 0
+    loop: 0
+    source: {fileID: 0}
   musicVolume: 0.7
   sfxVolume: 1
 --- !u!114 &839014963222725743
