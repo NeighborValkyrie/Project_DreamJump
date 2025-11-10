@@ -38,27 +38,41 @@ namespace PlatformerGame.Systems.Pool
             }
         }
 
-        private void InitializePools()
+private void InitializePools()
+{
+    poolDictionary = new Dictionary<string, Queue<GameObject>>();
+
+    // ⭐ null 체크 추가
+    if (pools == null || pools.Count == 0)
+    {
+        Debug.LogWarning("[ObjectPoolManager] Pools 배열이 비어있습니다. 풀을 생성하지 않습니다.");
+        return;
+    }
+
+    foreach (Pool pool in pools)
+    {
+        // ⭐ prefab null 체크 추가
+        if (pool.prefab == null)
         {
-            poolDictionary = new Dictionary<string, Queue<GameObject>>();
-
-            foreach (Pool pool in pools)
-            {
-                Queue<GameObject> objectPool = new Queue<GameObject>();
-
-                for (int i = 0; i < pool.size; i++)
-                {
-                    GameObject obj = Instantiate(pool.prefab);
-                    obj.SetActive(false);
-                    obj.transform.SetParent(transform);
-                    objectPool.Enqueue(obj);
-                }
-
-                poolDictionary.Add(pool.tag, objectPool);
-            }
-
-            Debug.Log($"[ObjectPoolManager] {pools.Count}개 풀 초기화 완료");
+            Debug.LogWarning($"[ObjectPoolManager] Pool '{pool.tag}'의 Prefab이 할당되지 않았습니다.");
+            continue;
         }
+
+        Queue<GameObject> objectPool = new Queue<GameObject>();
+
+        for (int i = 0; i < pool.size; i++)
+        {
+            GameObject obj = Instantiate(pool.prefab);
+            obj.SetActive(false);
+            obj.transform.SetParent(transform);
+            objectPool.Enqueue(obj);
+        }
+
+        poolDictionary.Add(pool.tag, objectPool);
+    }
+
+    Debug.Log($"[ObjectPoolManager] {poolDictionary.Count}개 풀 초기화 완료");
+}
 
         public GameObject SpawnFromPool(string tag, Vector3 position, Quaternion rotation)
         {
