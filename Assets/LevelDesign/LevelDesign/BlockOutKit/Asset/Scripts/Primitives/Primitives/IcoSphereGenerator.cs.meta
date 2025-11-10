@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: 47202cbf403354b46a1a18ef30e085dd
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 169790
+  packageName: BlockOut Prototype Kit
+  packageVersion: 1.0
+  assetPath: Assets/BlockOutKit/Asset/Scripts/Primitives/Primitives/IcoSphereGenerator.cs
+  uploadId: 414330

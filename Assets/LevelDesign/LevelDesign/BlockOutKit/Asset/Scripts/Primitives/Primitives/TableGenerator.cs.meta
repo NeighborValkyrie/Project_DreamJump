@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: aede566dcdd316c45af431cd192e018b
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 169790
+  packageName: BlockOut Prototype Kit
+  packageVersion: 1.0
+  assetPath: Assets/BlockOutKit/Asset/Scripts/Primitives/Primitives/TableGenerator.cs
+  uploadId: 414330

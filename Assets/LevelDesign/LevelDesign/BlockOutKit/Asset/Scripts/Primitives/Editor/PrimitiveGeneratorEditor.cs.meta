@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: f48508d8e30f49a4c8fc1c0826a06397
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 169790
+  packageName: BlockOut Prototype Kit
+  packageVersion: 1.0
+  assetPath: Assets/BlockOutKit/Asset/Scripts/Primitives/Editor/PrimitiveGeneratorEditor.cs
+  uploadId: 414330

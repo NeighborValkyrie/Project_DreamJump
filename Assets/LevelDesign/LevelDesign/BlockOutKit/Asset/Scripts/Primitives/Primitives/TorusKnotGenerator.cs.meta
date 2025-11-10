@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: 992bb948e5827694184ce60a9deb2ba3
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 169790
+  packageName: BlockOut Prototype Kit
+  packageVersion: 1.0
+  assetPath: Assets/BlockOutKit/Asset/Scripts/Primitives/Primitives/TorusKnotGenerator.cs
+  uploadId: 414330

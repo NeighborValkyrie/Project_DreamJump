@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: d5459747cdce71f469feab94ea1c61c1
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 169790
+  packageName: BlockOut Prototype Kit
+  packageVersion: 1.0
+  assetPath: Assets/BlockOutKit/Asset/Scripts/Primitives/Primitives/TorusGenerator.cs
+  uploadId: 414330
