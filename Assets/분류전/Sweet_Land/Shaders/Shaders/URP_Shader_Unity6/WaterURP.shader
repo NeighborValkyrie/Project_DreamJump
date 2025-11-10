@@ -52,7 +52,10 @@ Shader "ithappy/WaterURP"
             #pragma vertex VertexFunction
             #pragma fragment FragmentFunction
 
-            #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
+            #include "ShaderLibrary/Core.hlsl"
+
+
+
 
             struct Attributes
             {
@@ -225,7 +228,9 @@ Shader "ithappy/WaterURP"
 	        #pragma vertex DepthOnlyVertex
 	        #pragma fragment DepthOnlyFragment
 
-            #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
+            #include "ShaderLibrary/Core.hlsl"
+
+
 	        #include "Packages/com.unity.render-pipelines.core/ShaderLibrary/CommonMaterial.hlsl"
 	        #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/SurfaceInput.hlsl"
 	        #include "Packages/com.unity.render-pipelines.universal/Shaders/DepthOnlyPass.hlsl"
@@ -245,7 +250,8 @@ Shader "ithappy/WaterURP"
 	        #pragma vertex DepthNormalsVertex
 	        #pragma fragment DepthNormalsFragment
 
-            #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
+            #include "Packages/com.unity.render-pipelines.universal/Runtime/ShaderLibrary/Core.hlsl"
+
 	        #include "Packages/com.unity.render-pipelines.core/ShaderLibrary/CommonMaterial.hlsl"
 	        #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/SurfaceInput.hlsl"
 	        #include "Packages/com.unity.render-pipelines.universal/Shaders/DepthNormalsPass.hlsl"
