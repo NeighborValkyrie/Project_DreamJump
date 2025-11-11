@@ -1,11 +1,8 @@
-using System.Diagnostics;
-using UnityEngine;
+ï»¿using UnityEngine;
 using TraversalPro;
-// using System;  // ¾²°í ½ÍÀ¸¸é Ãß°¡, ¾Æ´Ï¸é System.Action ÀüÃ¼ ¼ö½Ä »ç¿ë
 
 public class RespawnManager : MonoBehaviour
 {
-    // ¡Ú Å¬·¡½º ¸Ç À§(ÇÊµå ¿µ¿ª)¿¡ "Á¤Àû ÀÌº¥Æ®"·Î ¼±¾ğÇÏ¼¼¿ä. (¸Ş¼­µå ¾È X)
     public static event System.Action OnRespawn;
 
     public static RespawnManager Instance { get; private set; }
@@ -15,14 +12,21 @@ public class RespawnManager : MonoBehaviour
 
     void Awake()
     {
-        if (Instance && Instance != this) { Destroy(gameObject); return; }
+        if (Instance && Instance != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
         Instance = this;
-        if (!CurrentCheckpoint) CurrentCheckpoint = defaultCheckpoint;
+
+        if (!CurrentCheckpoint)
+            CurrentCheckpoint = defaultCheckpoint;
     }
 
     public void SetCheckpoint(Transform checkpoint)
     {
-        if (checkpoint) CurrentCheckpoint = checkpoint;
+        if (checkpoint)
+            CurrentCheckpoint = checkpoint;
     }
 
     public void Respawn(GameObject player)
@@ -30,8 +34,13 @@ public class RespawnManager : MonoBehaviour
         if (!player) return;
 
         Transform cp = CurrentCheckpoint ? CurrentCheckpoint : defaultCheckpoint;
-        if (!cp) { UnityEngine.Debug.LogWarning("RespawnManager: Ã¼Å©Æ÷ÀÎÆ®°¡ ¼³Á¤µÇÁö ¾Ê¾Ò½À´Ï´Ù."); return; }
+        if (!cp)
+        {
+            Debug.LogWarning("RespawnManager: ì²´í¬í¬ì¸íŠ¸ê°€ ì„¤ì •ë˜ì§€ ì•Šì•˜ìŠµë‹ˆë‹¤.");
+            return;
+        }
 
+        // ìœ„ì¹˜ ë¦¬ì…‹
         var rb = player.GetComponent<Rigidbody>();
         if (rb)
         {
@@ -45,6 +54,7 @@ public class RespawnManager : MonoBehaviour
             player.transform.SetPositionAndRotation(cp.position, cp.rotation);
         }
 
+        // ìºë¦­í„° ëª¨í„° ë¦¬ì…‹ (TraversalPro)
         var motor = player.GetComponent<CharacterMotor>();
         if (motor != null)
         {
@@ -52,7 +62,12 @@ public class RespawnManager : MonoBehaviour
             motor.MaxLocalSpeed = Mathf.Max(motor.MaxLocalSpeed, 5f);
         }
 
-        // ¡Ú ¿©±â¼­ ÀÌº¥Æ® ¹ß»ç
+        // ğŸ’¥ ë¬´ì  ì‹œì‘
+        var inv = player.GetComponent<PlayerInvincibility>();
+        if (inv)
+            inv.StartInvincibility();
+
+        // ğŸ“¢ ë¦¬ìŠ¤í° ì´ë²¤íŠ¸ ë¸Œë¡œë“œìºìŠ¤íŠ¸
         OnRespawn?.Invoke();
     }
 }
