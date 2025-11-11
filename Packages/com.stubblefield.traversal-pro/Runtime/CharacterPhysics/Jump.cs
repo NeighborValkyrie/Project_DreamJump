@@ -129,5 +129,9 @@ namespace TraversalPro
                 RequestJump();
             }
         }
+        // Jump.cs 내부 맨 아래 추가
+        public TraversalPro.ICharacterMotor CharacterMotor => characterMotor.Value;
+
     }
+
 }

@@ -1,5 +1,9 @@
 fileFormatVersion: 2
+<<<<<<<< HEAD:Assets/Scenes/Stage/Stage 2.unity.meta
+guid: 62634fe5721412e43adfb16d6957520c
+========
 guid: b4b0291d1f888684191372ee862aa306
+>>>>>>>> main:Assets/Map, Scene/Main2.unity.meta
 DefaultImporter:
   externalObjects: {}
   userData: 
