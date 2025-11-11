@@ -1,4 +1,4 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 using UnityEngine.AI;
 using System.Collections;
 
@@ -8,33 +8,34 @@ public class EnemyChaseNav : MonoBehaviour
 {
     public enum State { Patrol, Chase, ReturnHome }
 
-    [Header("=== [TUNE] ÂüÁ¶ ===")]
-    public EnemyConeSight sight;                 // [º¯°æ°¡´É] ½Ã¾ß ÄÄÆ÷³ÍÆ®
-    public NavMeshAgent agent;                   // [º¯°æ°¡´É] NavMesh ¿¡ÀÌÀüÆ®
+    [Header("=== [TUNE] ì°¸ì¡° ===")]
+    public EnemyConeSight sight;                 // [ë³€ê²½ê°€ëŠ¥] ì‹œì•¼ ì»´í¬ë„ŒíŠ¸
+    public NavMeshAgent agent;                   // [ë³€ê²½ê°€ëŠ¥] NavMesh ì—ì´ì „íŠ¸
 
-    [Header("=== [TUNE] ¹èÈ¸ ===")]
-    [Tooltip("¹èÈ¸ ¹İ°æ")]
-    public float patrolRadius = 8f;              // [º¯°æ°¡´É]
-    [Tooltip("¿şÀÌÆ÷ÀÎÆ® µµÂø ÈÄ ¸Ó¹«´Â ½Ã°£(ÃÊ)")]
-    public float dwellTime = 1.2f;               // [º¯°æ°¡´É]
-    [Tooltip("¿şÀÌÆ÷ÀÎÆ® µµÂø ÆÇÁ¤ °Å¸®")]
-    public float waypointTolerance = 0.8f;       // [º¯°æ°¡´É]
-    [Tooltip("¹èÈ¸ ½Ã ´ÙÀ½ ¿şÀÌÆ÷ÀÎÆ®¸¦ Ã£À» ¶§ ½ÇÆĞ Çã¿ë È½¼ö")]
-    public int patrolSampleTries = 6;            // [º¯°æ°¡´É]
+    [Header("=== [TUNE] ë°°íšŒ ===")]
+    [Tooltip("ë°°íšŒ ë°˜ê²½")]
+    public float patrolRadius = 8f;              // [ë³€ê²½ê°€ëŠ¥]
+    [Tooltip("ì›¨ì´í¬ì¸íŠ¸ ë„ì°© í›„ ë¨¸ë¬´ëŠ” ì‹œê°„(ì´ˆ)")]
+    public float dwellTime = 1.2f;               // [ë³€ê²½ê°€ëŠ¥]
+    [Tooltip("ì›¨ì´í¬ì¸íŠ¸ ë„ì°© íŒì • ê±°ë¦¬")]
+    public float waypointTolerance = 0.8f;       // [ë³€ê²½ê°€ëŠ¥]
+    [Tooltip("ë°°íšŒ ì‹œ ë‹¤ìŒ ì›¨ì´í¬ì¸íŠ¸ë¥¼ ì°¾ì„ ë•Œ ì‹¤íŒ¨ í—ˆìš© íšŸìˆ˜")]
+    public int patrolSampleTries = 6;            // [ë³€ê²½ê°€ëŠ¥]
 
-    [Header("=== [TUNE] Ãß°İ ===")]
-    [Tooltip("¸ñÇ¥ Àç°è»ê ÁÖ±â(ÃÊ)")]
-    public float repathInterval = 0.1f;          // [º¯°æ°¡´É]
-    [Tooltip("Á¤Áö °Å¸®(ÇÃ·¹ÀÌ¾î Á¢±Ù ½Ã ¾î´À Á¤µµ ¾Õ¿¡¼­ ¸ØÃâÁö)")]
-    public float stopDistance = 1.2f;            // [º¯°æ°¡´É]
-    [Tooltip("ÇÃ·¹ÀÌ¾î¸¦ ¸ø º» »óÅÂ À¯Áö ½Ã°£(ÃÊ) ÃÊ°ú ½Ã º¹±Í")]
-    public float lostHoldTime = 2.0f;            // [º¯°æ°¡´É]
+    [Header("=== [TUNE] ì¶”ê²© ===")]
+    [Tooltip("ëª©í‘œ ì¬ê³„ì‚° ì£¼ê¸°(ì´ˆ)")]
+    public float repathInterval = 0.1f;          // [ë³€ê²½ê°€ëŠ¥]
+    [Tooltip("ì •ì§€ ê±°ë¦¬(í”Œë ˆì´ì–´ ì ‘ê·¼ ì‹œ ì–´ëŠ ì •ë„ ì•ì—ì„œ ë©ˆì¶œì§€)")]
+    public float stopDistance = 1.2f;            // [ë³€ê²½ê°€ëŠ¥]
+    [Tooltip("í”Œë ˆì´ì–´ë¥¼ ëª» ë³¸ ìƒíƒœ ìœ ì§€ ì‹œê°„(ì´ˆ) ì´ˆê³¼ ì‹œ ë³µê·€")]
+    public float lostHoldTime = 2.0f;            // [ë³€ê²½ê°€ëŠ¥]
 
-    [Header("=== [TUNE] º¹±Í ===")]
-    [Tooltip("Áı(½ÃÀÛ À§Ä¡) µµÂø ÆÇÁ¤ °Å¸®")]
-    public float homeArriveDistance = 0.8f;      // [º¯°æ°¡´É]
+    [Header("=== [TUNE] ë³µê·€ ===")]
+    [Tooltip("ì§‘(ì‹œì‘ ìœ„ì¹˜) ë„ì°© íŒì • ê±°ë¦¬")]
+    public float homeArriveDistance = 0.8f;      // [ë³€ê²½ê°€ëŠ¥]
 
     public State CurrentState { get; private set; }
+    public bool IsChasing { get; private set; }
 
     Vector3 homePos;
     float lastSeenTime = -999f;
@@ -51,13 +52,13 @@ public class EnemyChaseNav : MonoBehaviour
         if (!sight) sight = GetComponent<EnemyConeSight>();
         if (!agent) agent = GetComponent<NavMeshAgent>();
 
-        // °¡Àå ´Ü¼øÇÑ ¼¼ÆÃ: ¿¡ÀÌÀüÆ®°¡ È¸Àüµµ Ã³¸®
+        // ê°€ì¥ ë‹¨ìˆœí•œ ì„¸íŒ…: ì—ì´ì „íŠ¸ê°€ íšŒì „ë„ ì²˜ë¦¬
         agent.updateRotation = true;
         agent.stoppingDistance = stopDistance;
 
         homePos = transform.position;
 
-        // sight.player ÀÚµ¿ ÇÒ´çÀÌ ¾ÈµÇ¾î ÀÖ´Ù¸é ÅÂ±×·Î Ã£±â
+        // sight.player ìë™ í• ë‹¹ì´ ì•ˆë˜ì–´ ìˆë‹¤ë©´ íƒœê·¸ë¡œ ì°¾ê¸°
         if (!sight.player)
         {
             var p = GameObject.FindGameObjectWithTag("Player");
@@ -102,17 +103,17 @@ public class EnemyChaseNav : MonoBehaviour
 
         while (CurrentState == State.Patrol)
         {
-            // ÇÃ·¹ÀÌ¾î¸¦ º¸¸é Ãß°İ ÀüÈ¯
+            // í”Œë ˆì´ì–´ë¥¼ ë³´ë©´ ì¶”ê²© ì „í™˜
             if (sight.CanSeePlayer && sight.player)
             {
                 SetState(State.Chase);
                 yield break;
             }
 
-            // ¿şÀÌÆ÷ÀÎÆ® µµÂø Ã¼Å©
+            // ì›¨ì´í¬ì¸íŠ¸ ë„ì°© ì²´í¬
             if (!agent.pathPending && agent.remainingDistance <= waypointTolerance)
             {
-                // µµÂø ÈÄ Àá½Ã ¸Ó¹°±â
+                // ë„ì°© í›„ ì ì‹œ ë¨¸ë¬¼ê¸°
                 if (float.IsNegativeInfinity(dwellUntil))
                     dwellUntil = Time.time + dwellTime;
 
@@ -145,7 +146,7 @@ public class EnemyChaseNav : MonoBehaviour
             }
             else
             {
-                // ¸ø º» ½Ã°£ÀÌ ÀÓ°èÄ¡¸¦ ³ÑÀ¸¸é º¹±Í
+                // ëª» ë³¸ ì‹œê°„ì´ ì„ê³„ì¹˜ë¥¼ ë„˜ìœ¼ë©´ ë³µê·€
                 if (Time.time - lastSeenTime > lostHoldTime)
                 {
                     SetState(State.ReturnHome);
@@ -165,7 +166,7 @@ public class EnemyChaseNav : MonoBehaviour
 
         while (CurrentState == State.ReturnHome)
         {
-            // º¹±Í µµÁß ÇÃ·¹ÀÌ¾î¸¦ º¸¸é ¹Ù·Î Ãß°İ
+            // ë³µê·€ ë„ì¤‘ í”Œë ˆì´ì–´ë¥¼ ë³´ë©´ ë°”ë¡œ ì¶”ê²©
             if (sight.CanSeePlayer && sight.player)
             {
                 SetState(State.Chase);
@@ -192,7 +193,7 @@ public class EnemyChaseNav : MonoBehaviour
             if (NavMesh.SamplePosition(cand, out NavMeshHit hit, 2f, NavMesh.AllAreas))
                 return hit.position;
         }
-        // ½ÇÆĞ ½Ã Áı À§Ä¡·Î
+        // ì‹¤íŒ¨ ì‹œ ì§‘ ìœ„ì¹˜ë¡œ
         return homePos;
     }
 
