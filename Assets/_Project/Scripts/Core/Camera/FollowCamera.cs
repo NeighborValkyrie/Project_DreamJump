@@ -2,30 +2,42 @@ using UnityEngine;
 
 namespace PlatformerGame.Core.Camera
 {
-    /// <summary>
-    /// SmoothDamp 기반 3인칭 카메라
-    /// v7.0: 프레임 독립적 움직임
-    /// </summary>
     public class FollowCamera : MonoBehaviour
     {
-        [Header("Target Settings")]
+        [Header("Target")]
         [SerializeField] private Transform target;
 
-        [Header("Distance Settings")]
+        [Header("Distance")]
         [SerializeField] private float distance = 5f;
+        [SerializeField] private float minDistance = 2f;
+        [SerializeField] private float maxDistance = 10f;
         [SerializeField] private float height = 2f;
 
+        [Header("Mouse")]
+        [SerializeField] private float mouseSensitivity = 2f;
+        [SerializeField] private float minVerticalAngle = -20f;
+        [SerializeField] private float maxVerticalAngle = 60f;
+        [SerializeField] private bool invertY = false;
+
         [Header("Smoothness")]
-        [SerializeField] private float smoothness = 0.1f;
+        [SerializeField] private float positionDamping = 5f;
+        [SerializeField] private float rotationDamping = 10f;
 
-        [Header("Look At Settings")]
-        [SerializeField] private Vector3 lookAtOffset = new Vector3(0f, 1f, 0f);
+        [Header("Zoom")]
+        [SerializeField] private float zoomSpeed = 2f;
 
-        private Vector3 currentVelocity = Vector3.zero;
+        [Header("Collision")]
+        [SerializeField] private bool checkCollision = true;
+        [SerializeField] private float collisionBuffer = 0.3f;
+        [SerializeField] private LayerMask collisionLayers;
+
+        private float currentRotationX = 0f;
+        private float currentRotationY = 20f;
+        private float targetDistance;
+        private Vector3 velocity = Vector3.zero;
 
         private void Start()
         {
-            // 타겟이 할당되지 않은 경우 Player 찾기
             if (target == null)
             {
                 GameObject player = GameObject.FindGameObjectWithTag("Player");
@@ -35,26 +47,76 @@ namespace PlatformerGame.Core.Camera
                     target = cameraTarget != null ? cameraTarget : player.transform;
                 }
             }
+
+            targetDistance = distance;
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
         }
 
         private void LateUpdate()
         {
             if (target == null) return;
 
-            Vector3 desiredPosition = target.position - target.forward * distance + Vector3.up * height;
-            transform.position = Vector3.SmoothDamp(
-                transform.position,
-                desiredPosition,
-                ref currentVelocity,
-                smoothness
-            );
-
-            transform.LookAt(target.position + lookAtOffset);
+            HandleMouseInput();
+            HandleZoom();
+            UpdateCameraPosition();
         }
 
-        public void SetTarget(Transform newTarget)
+        private void HandleMouseInput()
         {
-            target = newTarget;
+            if (Input.GetMouseButton(1))
+            {
+                float mouseX = Input.GetAxis("Mouse X") * mouseSensitivity;
+                float mouseY = Input.GetAxis("Mouse Y") * mouseSensitivity;
+
+                if (invertY) mouseY = -mouseY;
+
+                currentRotationX += mouseX;
+                currentRotationY = Mathf.Clamp(currentRotationY - mouseY, minVerticalAngle, maxVerticalAngle);
+            }
+
+            if (Input.GetKeyDown(KeyCode.Escape))
+            {
+                Cursor.lockState = CursorLockMode.None;
+                Cursor.visible = true;
+            }
+        }
+
+        private void HandleZoom()
+        {
+            float scroll = Input.GetAxis("Mouse ScrollWheel");
+            targetDistance = Mathf.Clamp(targetDistance - scroll * zoomSpeed, minDistance, maxDistance);
+        }
+
+        private void UpdateCameraPosition()
+        {
+            Quaternion rotation = Quaternion.Euler(currentRotationY, currentRotationX, 0f);
+            Vector3 targetPosition = target.position - rotation * Vector3.forward * targetDistance + Vector3.up * height;
+
+            if (checkCollision)
+            {
+                RaycastHit hit;
+                Vector3 direction = targetPosition - target.position;
+                float maxDist = direction.magnitude;
+
+                if (Physics.Raycast(target.position, direction.normalized, out hit, maxDist, collisionLayers))
+                {
+                    targetPosition = hit.point - direction.normalized * collisionBuffer;
+                }
+            }
+
+            transform.position = Vector3.Lerp(transform.position, targetPosition, positionDamping * Time.deltaTime);
+            
+            Quaternion targetRotation = Quaternion.LookRotation(target.position - transform.position);
+            transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, rotationDamping * Time.deltaTime);
+        }
+
+        public void SetTarget(Transform newTarget) => target = newTarget;
+        public void SetMouseSensitivity(float sensitivity) => mouseSensitivity = Mathf.Clamp(sensitivity, 0.1f, 5f);
+        public void ResetRotation()
+        {
+            currentRotationX = 0f;
+            currentRotationY = 20f;
         }
     }
 }

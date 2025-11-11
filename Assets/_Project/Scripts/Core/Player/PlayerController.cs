@@ -2,9 +2,6 @@ using UnityEngine;
 
 namespace PlatformerGame.Core.Player
 {
-    /// <summary>
-    /// 플레이어 입력 처리 및 상호작용 제어
-    /// </summary>
     [RequireComponent(typeof(PlayerMovement))]
     [RequireComponent(typeof(PlayerAnimation))]
     public class PlayerController : MonoBehaviour
@@ -13,7 +10,7 @@ namespace PlatformerGame.Core.Player
         private PlayerMovement movement;
         private PlayerAnimation animation;
 
-        [Header("Input Settings")]
+        [Header("Input")]
         [SerializeField] private bool inputEnabled = true;
 
         [Header("Interaction")]
@@ -28,16 +25,20 @@ namespace PlatformerGame.Core.Player
 
         private void Start()
         {
-            // 입력 상태 변경 이벤트 구독
             if (PlatformerGame.Systems.Events.GameEventManager.Instance != null)
             {
                 PlatformerGame.Systems.Events.GameEventManager.Instance.OnPlayerInputStateChanged += SetInputEnabled;
+            }
+
+            UnityEngine.Camera mainCam = UnityEngine.Camera.main;
+            if (mainCam != null && movement != null)
+            {
+                movement.SetCameraTransform(mainCam.transform);
             }
         }
 
         private void OnDestroy()
         {
-            // 이벤트 구독 해제
             if (PlatformerGame.Systems.Events.GameEventManager.Instance != null)
             {
                 PlatformerGame.Systems.Events.GameEventManager.Instance.OnPlayerInputStateChanged -= SetInputEnabled;
@@ -48,21 +49,19 @@ namespace PlatformerGame.Core.Player
         {
             if (!inputEnabled) return;
 
-            HandleMovementInput();
-            HandleJumpInput();
-            HandleInteractionInput();
+            HandleMovement();
+            HandleJump();
+            HandleInteraction();
         }
 
-        private void HandleMovementInput()
+        private void HandleMovement()
         {
-            float horizontal = Input.GetAxisRaw("Horizontal");
-            float vertical = Input.GetAxisRaw("Vertical");
-
-            Vector3 moveDirection = new Vector3(horizontal, 0f, vertical).normalized;
-            movement.SetMoveDirection(moveDirection);
+            float h = Input.GetAxisRaw("Horizontal");
+            float v = Input.GetAxisRaw("Vertical");
+            movement.SetMoveInput(new Vector3(h, 0f, v).normalized);
         }
 
-        private void HandleJumpInput()
+        private void HandleJump()
         {
             if (Input.GetButtonDown("Jump"))
             {
@@ -70,25 +69,19 @@ namespace PlatformerGame.Core.Player
             }
         }
 
-        private void HandleInteractionInput()
+        private void HandleInteraction()
         {
             if (Input.GetKeyDown(KeyCode.E))
             {
-                TryInteract();
-            }
-        }
-
-        private void TryInteract()
-        {
-            Collider[] hitColliders = Physics.OverlapSphere(transform.position, interactionRange, interactableLayer);
-
-            foreach (var hitCollider in hitColliders)
-            {
-                var interactable = hitCollider.GetComponent<PlatformerGame.Interactions.Interfaces.IInteractable>();
-                if (interactable != null)
+                Collider[] hits = Physics.OverlapSphere(transform.position, interactionRange, interactableLayer);
+                foreach (var hit in hits)
                 {
-                    interactable.Interact(gameObject);
-                    break;
+                    var interactable = hit.GetComponent<PlatformerGame.Interactions.Interfaces.IInteractable>();
+                    if (interactable != null)
+                    {
+                        interactable.Interact(gameObject);
+                        break;
+                    }
                 }
             }
         }
@@ -96,6 +89,10 @@ namespace PlatformerGame.Core.Player
         public void SetInputEnabled(bool enabled)
         {
             inputEnabled = enabled;
+            if (!enabled && movement != null)
+            {
+                movement.SetMoveInput(Vector3.zero);
+            }
         }
 
         private void OnDrawGizmosSelected()
