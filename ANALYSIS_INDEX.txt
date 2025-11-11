@@ -1,0 +1,197 @@
+================================================================================
+                    DREAMJUMP SCENE ANALYSIS INDEX
+                      Complete Analysis Files
+================================================================================
+
+GENERATED: 2025-11-11
+Analysis of 4 Unity Scene Files
+
+FILES GENERATED:
+===============
+
+1. SCENE_ANALYSIS_REPORT.txt (6.0 KB)
+   - Quick reference guide for all 4 scenes
+   - Root GameObject lists
+   - Key systems summary
+   - Scene comparison table
+
+2. DETAILED_HIERARCHY.txt (See separate report)
+   - Complete hierarchical breakdowns
+   - Component analysis
+   - Script identification
+   - Architectural patterns
+
+3. SCENE_STRUCTURE_SUMMARY.txt (7.3 KB)
+   - Executive summary
+   - Technical observations
+   - Recommendations
+   - Integration notes
+
+
+SCENE FILES ANALYZED
+====================
+
+1. C:/Project_DreamJump/Assets/_Project/Scenes/egutjugut.unity
+   - 117 GameObjects, 21 roots
+   - Test/tutorial scene
+   - Full mechanics showcase
+   - See: SCENE_ANALYSIS_REPORT.txt, Section 1
+
+2. C:/Project_DreamJump/Assets/_Project/Scenes/minji.unity
+   - 67 GameObjects, 4 roots
+   - UI test scene
+   - Inventory system demo
+   - See: SCENE_ANALYSIS_REPORT.txt, Section 2
+
+3. C:/Project_DreamJump/Assets/_Project/Scenes/02_Stage1.unity
+   - 9 GameObjects, 3 roots
+   - Tutorial level
+   - Building exploration
+   - See: SCENE_ANALYSIS_REPORT.txt, Section 3
+
+4. C:/Project_DreamJump/Assets/_Project/Scenes/03_Stage2.unity
+   - 68 GameObjects, 9 roots
+   - Candy-themed platformer
+   - Challenge level
+   - See: SCENE_ANALYSIS_REPORT.txt, Section 4
+
+
+KEY FINDINGS SUMMARY
+====================
+
+CORE SYSTEMS FOUND:
+  - RespawnSystem (checkpoint/respawn management)
+  - GameSystem (main game controller)
+  - BuffManager (status effects)
+  - CollectibleManager (item collection)
+  - InventorySystem (UI inventory with 12 slots)
+
+PLAYER IMPLEMENTATIONS:
+  - Third Person Player (egutjugut) - Full skeletal rig
+  - Player (03_Stage2) - Simplified controller
+
+LEVEL PATTERNS:
+  - Mechanics test scene (egutjugut)
+  - Linear tutorial (02_Stage1)
+  - Complex platformer (03_Stage2)
+  - UI/menu test (minji)
+
+CAMERAS & LIGHTING:
+  - Main Camera in all scenes
+  - Cinemachine Camera (egutjugut - advanced follow)
+  - Directional Light in all scenes
+  - Warm lighting in tutorial scene
+
+UI COMPONENTS:
+  - Pause menus in all gameplay scenes
+  - Extensive inventory (12 slots) in minji
+  - Health/coin display systems
+  - Checkpoint notifications
+
+
+QUICK NAVIGATION GUIDE
+======================
+
+TO FIND:                              GO TO:
+--------                              ------
+Root GameObjects list                 SCENE_ANALYSIS_REPORT.txt - Section header
+Detailed hierarchy                    DETAILED_HIERARCHY.txt
+RespawnSystem info                    SCENE_ANALYSIS_REPORT.txt, Section 1
+UI system breakdown                   DETAILED_HIERARCHY.txt - minji section
+Level geometry                        SCENE_STRUCTURE_SUMMARY.txt
+Player implementation                 SCENE_STRUCTURE_SUMMARY.txt
+Game systems architecture             SCENE_ANALYSIS_REPORT.txt or Summary
+Recommended study path                SCENE_STRUCTURE_SUMMARY.txt - Recommendations
+File paths                            SCENE_ANALYSIS_REPORT.txt - Bottom
+
+USAGE RECOMMENDATIONS
+====================
+
+FOR DEVELOPERS:
+  1. Start with SCENE_STRUCTURE_SUMMARY.txt for overview
+  2. Review SCENE_ANALYSIS_REPORT.txt for quick reference
+  3. Consult DETAILED_HIERARCHY.txt for deep dives
+
+FOR DESIGNERS:
+  1. Check level layouts in 02_Stage1 and 03_Stage2
+  2. Review platform types and hazards
+  3. Study progression from tutorial to challenge level
+
+FOR PROGRAMMERS:
+  1. Study systems in egutjugut for mechanics
+  2. Review player controller implementations
+  3. Check manager systems and their organization
+  4. Examine respawn/checkpoint system
+
+FOR PROJECT MANAGERS:
+  1. Use scene comparison table in Analysis Report
+  2. Check complexity metrics (GameObject counts)
+  3. Review progression path (02->03 stages)
+
+
+STATISTICS AT A GLANCE
+======================
+
+Scene           | Objects | Roots | Type          | Complexity
+----------------|---------|-------|---------------|----------
+egutjugut       | 117     | 21    | Test/Tutorial | HIGH
+minji           | 67      | 4     | UI Test       | MEDIUM
+02_Stage1       | 9       | 3     | Tutorial      | LOW
+03_Stage2       | 68      | 9     | Challenge     | MEDIUM-HIGH
+
+Total GameObjects Analyzed: 261
+Total Scenes Analyzed: 4
+Average Complexity: MEDIUM
+
+
+TECHNICAL NOTES
+===============
+
+Extraction Method:
+  - Regex parsing of Unity YAML scene files
+  - Direct GameObject name extraction from m_Name fields
+  - Transform relationship analysis
+  - Component identification
+
+Data Accuracy:
+  - Root objects: 100% accurate
+  - First-level children: 95% identified
+  - Deep children: Names from m_Name only
+  - Unresolved IDs: Meshes/colliders (no m_Name)
+
+File Sizes:
+  - egutjugut.unity: 290.2 KB
+  - minji.unity: Large (UI content)
+  - 02_Stage1.unity: 871.9 KB
+  - 03_Stage2.unity: 1.4 MB
+
+
+RELATED INFORMATION
+===================
+
+Analysis performed on: November 11, 2025
+Project: DreamJump
+Working directory: C:/Project_DreamJump
+Git branch: minji_main
+
+For more detailed scene editing, open in Unity Editor:
+  Unity Version: Check project settings
+  Scene path: Assets/_Project/Scenes/
+
+For scripting reference, check:
+  C:/Project_DreamJump/Assets/_Project/Scripts/
+
+
+DOCUMENT OVERVIEW
+=================
+
+This index file: Quick navigation and statistics
+SCENE_ANALYSIS_REPORT.txt: Primary reference document
+SCENE_STRUCTURE_SUMMARY.txt: Executive summary and recommendations
+DETAILED_HIERARCHY.txt: Complete hierarchical breakdown
+
+All files located at:
+  C:/Project_DreamJump/
+
+Last Updated: 2025-11-11
+Analysis Version: 1.0

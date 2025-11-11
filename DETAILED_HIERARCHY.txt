@@ -1,0 +1,258 @@
+================================================================================
+              DETAILED GAMEOBJECT HIERARCHY ANALYSIS
+================================================================================
+
+EGUTJUGUT.UNITY - COMPLETE HIERARCHY
+================================================================================
+
+ROOT GAMEOBJECTS (21 total):
+
+1. RespawnSystem
+   - Script: RespawnSystem.cs
+   - Purpose: Manages respawn points and checkpoints
+   - Default Checkpoint: first respawn point
+
+2. GameSystem
+   - Script: GameManager/System controller
+   - Purpose: Main game logic orchestrator
+
+3. Third Person Player
+   - Script: Third Person Player Controller
+   - Child: Cinemachine Camera (virtual camera for smooth following)
+   - Components: Animator, Rigidbody
+   - Skeleton: Full humanoid rig (Hips, Spine, Chest, Shoulders, Arms, Legs, etc.)
+
+4. BuffManager
+   - Purpose: Manages status effects and buffs
+
+5. CollectibleManager
+   - Purpose: Manages item collection and inventory
+
+6. EventSystem
+   - Purpose: UI event handling
+
+7. Navigation
+   - Purpose: Pathfinding/AI navigation
+
+8. Main Camera
+   - Purpose: Primary game camera view
+
+9. Directional Light
+   - Purpose: Main sun/directional lighting
+   - Color: Warm (1, 0.957, 0.839)
+
+10. Platforms & Interactive Elements:
+    - jump pad (with child Platform)
+    - softjump (with child Platform)
+    - slip (with child Platform)
+    - conveyer (with child Platform_01 - moving platform)
+    - statr lift (Starting lift)
+    - end lift (Ending lift)
+    - galss (Glass platform)
+    - Cube (Generic platform)
+    - Cube (1) (Another platform)
+
+11. Checkpoint System:
+    - first respawn point (Initial spawn)
+    - respawn (Respawn marker)
+
+12. UI Canvases:
+    - Pause(Canvas) - Pause menu UI
+    - CheckpointPopup(canvas) - Checkpoint notification
+    - Collect(canvas) - Collection feedback UI
+    - HUD_Counters(GameObject) - Score/status display
+
+
+MINJI.UNITY - COMPLETE HIERARCHY
+================================================================================
+
+ROOT GAMEOBJECTS (4 total):
+
+1. Main Camera
+   - Purpose: Primary view camera
+   - Component: Camera component
+
+2. Directional Light
+   - Purpose: Main lighting
+
+3. EventSystem
+   - Purpose: UI event system
+
+4. Ground
+   - Purpose: Ground plane/floor
+   - Children: (Contains visual geometry)
+
+UI SYSTEM HIERARCHY:
+  GameCanvas (Canvas parent)
+    戍式式 InventoryPanel
+    弛   戍式式 ItemSlotGrid
+    弛   弛   戍式式 ItemSlot_01
+    弛   弛   戍式式 ItemSlot_02
+    弛   弛   戍式式 ItemSlot_03
+    弛   弛   戍式式 ItemSlot_04
+    弛   弛   戍式式 ItemSlot_05
+    弛   弛   戍式式 ItemSlot_06
+    弛   弛   戍式式 ItemSlot_07
+    弛   弛   戍式式 ItemSlot_08
+    弛   弛   戍式式 ItemSlot_09
+    弛   弛   戍式式 ItemSlot_10
+    弛   弛   戌式式 ItemSlot_11
+    弛   戌式式 CloseButton
+    戍式式 DialoguePanel
+    弛   戌式式 Text (TMP)
+    戍式式 HealthBar
+    弛   戍式式 Background (Image)
+    弛   戌式式 Fill (Image)
+    戍式式 CoinText
+    戍式式 HUD (Text displays)
+    戌式式 FadePanel (Transition effect)
+
+NOTE: Extensive UI system designed for inventory management
+
+
+02_STAGE1.UNITY - COMPLETE HIERARCHY
+================================================================================
+
+ROOT GAMEOBJECTS (3 total):
+
+1. Main Camera
+   - Purpose: Primary level camera
+   - View: Static or follows player
+
+2. 1st Building
+   - Purpose: Main playable environment
+   - Children:
+     戍式式 Roof
+     戍式式 Section1 (Interior room)
+     戍式式 Section2 (Interior room)
+     戍式式 Section3 (Interior room)
+     戍式式 Section4 (Interior room)
+     戌式式 Section5 (Interior room)
+
+3. Next Stage Floor
+   - Purpose: Transition to next level
+   - Children:
+     戍式式 Floor geometry
+     戌式式 Trigger area
+
+LEVEL DESIGN:
+  - Linear progression through building sections
+  - Each section represents a tutorial or teaching area
+  - Final platform transitions to Stage 2
+
+
+03_STAGE2.UNITY - COMPLETE HIERARCHY
+================================================================================
+
+ROOT GAMEOBJECTS (9 total):
+
+1. Player
+   - Purpose: Player character
+   - Children: Camera follow components, input handlers
+   - Components: Movement, Collision, Animation
+
+2. Main Camera
+   - Purpose: Primary game camera
+   - Behavior: Follows player with smoothing
+
+3. Monster
+   - Purpose: Enemy/Boss encounter
+   - Components: AI, Patrolling/Attacking behavior
+
+4. Floor
+   - Purpose: Ground plane
+   - Children: 
+     戍式式 Floor_platform_1
+     戌式式 Floor_platform_2
+
+5. Objects
+   - Purpose: Container for collectibles/interactive objects
+   - Children: (Multiple candy/waffle themed objects)
+     戍式式 Candy (multiple instances)
+     戍式式 Collectible items
+     戌式式 Interactive elements
+
+6. Environment
+   - Purpose: Structural and decorative elements
+   - Children: (Large group of environmental meshes)
+     戍式式 Platforms (Main platform network)
+     戍式式 Candy platforms (1-5)
+     戍式式 Bridges
+     弛   戍式式 MiddleCandyBridge
+     弛   戍式式 NorthCandyBridge
+     弛   戌式式 WaffelBridge
+     戍式式 Water hazards (4 sections)
+     戍式式 Cliffs
+     戍式式 Ruins (Destructible)
+     戌式式 Decorative elements
+
+7. Env
+   - Purpose: Additional environmental objects
+   - Children: Terrain features, props
+
+8. ScriptFloor
+   - Purpose: Dynamically controlled floor platform
+   - Components: Script behavior for moving/activating
+
+9. Directional Light
+   - Purpose: Main scene lighting
+   - Color: Standard white/warm
+
+
+================================================================================
+COMPONENT ANALYSIS
+================================================================================
+
+Scripts Found (by scene):
+
+EGUTJUGUT:
+  - RespawnSystem - Checkpoint/respawn management
+  - GameSystem - Main game controller
+  - Third Person Player Controller - Character movement
+  - BuffManager - Status effect handler
+  - CollectibleManager - Item pickup system
+  - MovingPlatform - Movement for conveyer/lifts
+  - Platform (generic) - Static/kinematic platforms
+
+MINJI:
+  - UIManager - Canvas management
+  - InventorySystem - Inventory UI handling
+  - DialogueManager - Dialogue display
+  - HealthDisplay - Health bar updates
+  - CoinCounter - Currency display
+
+03_STAGE2:
+  - PlayerController - Character movement/input
+  - MonsterAI - Enemy behavior
+  - DynamicFloor - ScriptFloor behavior
+  - PlatformManager - Platform coordination
+  - HazardTrigger - Hazard detection (water, etc.)
+
+
+================================================================================
+COMPARISON: SCENE COMPLEXITY
+================================================================================
+
+egutjugut.unity
+  - 117 GameObjects
+  - 21 Root objects
+  - Complexity: HIGH (Interactive mechanics, systems)
+  - Focus: Mechanics testing and tutorial elements
+
+minji.unity
+  - 67 GameObjects  
+  - 4 Root objects
+  - Complexity: MEDIUM (UI-focused)
+  - Focus: Menu/inventory system testing
+
+02_Stage1.unity
+  - 9 GameObjects
+  - 3 Root objects
+  - Complexity: LOW (Linear level)
+  - Focus: Simple geometry and progression
+
+03_Stage2.unity
+  - 68 GameObjects
+  - 9 Root objects
+  - Complexity: MEDIUM-HIGH (Dense environment)
+  - Focus: Platformer challenges and hazards

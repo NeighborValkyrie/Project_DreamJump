@@ -1,0 +1,176 @@
+================================================================================
+                    UNITY SCENE ANALYSIS REPORT
+                    DreamJump Project Structure
+================================================================================
+
+Generated: 2025-11-11
+Analysis of 4 Scene Files
+
+
+================================================================================
+1. EGUTJUGUT.UNITY (Tutorial/Test Scene)
+================================================================================
+
+FILE PATH: C:/Project_DreamJump/Assets/_Project/Scenes/egutjugut.unity
+STATISTICS:
+  - Total GameObjects: 117
+  - Root Objects: 21
+  - Scene Type: Test/Tutorial with interactive elements
+
+ROOT LEVEL GAMEOBJECTS (21):
+  - RespawnSystem (Core System)
+  - BuffManager (Buff/Effect System)
+  - CollectibleManager (Item Collection)
+  - GameSystem (Main Game Logic)
+  - Third Person Player (Player Character)
+  - Main Camera (Primary Camera)
+  - Cinemachine Camera (Virtual Camera)
+  - Directional Light (Lighting)
+  - EventSystem (UI Events)
+  - Navigation (Pathfinding)
+  - conveyer (Conveyor Belt Platform)
+  - jump pad (Jump Enhancement Platform)
+  - softjump (Soft Jump Surface)
+  - slip (Slippery Surface)
+  - statr lift (Starting Lift/Platform)
+  - end lift (Ending Lift/Platform)
+  - galss (Glass/Transparent Platform)
+  - first respawn point (Checkpoint)
+  - respawn (Respawn Point)
+  - Cube (Platform)
+  - Cube (1) (Platform)
+
+KEY SYSTEMS:
+  Systems: RespawnSystem, EventSystem, GameSystem
+  Managers: BuffManager, CollectibleManager
+  Player: Third Person Player (with skeleton/bones)
+  Cameras: Main Camera, Cinemachine Camera
+  UI: Pause Canvas, CheckpointPopup, Collect Canvas, HUD_Counters
+
+
+================================================================================
+2. MINJI.UNITY (Simple Demo/Test Scene)
+================================================================================
+
+FILE PATH: C:/Project_DreamJump/Assets/_Project/Scenes/minji.unity
+STATISTICS:
+  - Total GameObjects: 67
+  - Root Objects: 4
+  - Scene Type: Minimal test scene (UI/Menu focused)
+
+ROOT LEVEL GAMEOBJECTS:
+  - Main Camera
+  - Directional Light
+  - EventSystem
+  - Ground
+
+UI SYSTEMS:
+  - GameCanvas (Main UI Container)
+  - InventoryPanel (Inventory UI)
+  - ItemSlotGrid (12 inventory slots)
+  - DialoguePanel
+  - PauseMenuPanel
+  - HealthBar
+  - CoinText
+  - FadePanel
+
+NOTE: UI test scene with minimal 3D geometry
+
+
+================================================================================
+3. 02_STAGE1.UNITY (First Level/Stage)
+================================================================================
+
+FILE PATH: C:/Project_DreamJump/Assets/_Project/Scenes/02_Stage1.unity
+STATISTICS:
+  - Total GameObjects: 9
+  - Root Objects: 3
+  - Scene Type: Tutorial/Introduction Stage
+
+ROOT LEVEL GAMEOBJECTS:
+  - Main Camera
+  - 1st Building (Main level structure with Roof, Section1-5)
+  - Next Stage Floor (Progression trigger)
+
+LEVEL STRUCTURE:
+  1st Building:
+    - Roof
+    - Section1, Section2, Section3, Section4, Section5
+  
+  Next Stage Floor:
+    - Floor transition platform
+
+
+================================================================================
+4. 03_STAGE2.UNITY (Second Level/Stage - Candy-themed)
+================================================================================
+
+FILE PATH: C:/Project_DreamJump/Assets/_Project/Scenes/03_Stage2.unity
+STATISTICS:
+  - Total GameObjects: 68
+  - Root Objects: 9
+  - Scene Type: Advanced Stage with environmental hazards
+
+ROOT LEVEL GAMEOBJECTS:
+  - Player
+  - Main Camera
+  - Directional Light
+  - Monster (Enemy/Boss)
+  - Floor
+  - Objects (Collectibles/interactive)
+  - Environment (Decorative/structural)
+  - Env (Environmental objects)
+  - ScriptFloor (Dynamic floor mechanics)
+
+LEVEL GEOMETRY:
+  Platforms: Candy (1-5), Platforms, Cliffs
+  Bridges: MiddleCandyBridge, NorthCandyBridge, WaffelBridge
+  Hazards: Water (4 sections), Ruins
+  Special: WaffleBot, WaffleUp (lift), Start (1), Middle
+  ScriptFloor, Monster (boss)
+
+
+================================================================================
+SCENE SUMMARY TABLE
+================================================================================
+
+Scene Name     | GameObjects | Roots | Type               | Key Systems
+---------------|-------------|-------|-------------------|---------------------------
+egutjugut      | 117         | 21    | Interactive Test  | RespawnSystem, Managers
+minji          | 67          | 4     | UI Test/Menu      | InventorySystem, Health
+02_Stage1      | 9           | 3     | Tutorial Level    | Camera, Building geometry
+03_Stage2      | 68          | 9     | Challenge Level   | Player, Monster, Hazards
+
+================================================================================
+KEY FINDINGS
+================================================================================
+
+1. RespawnSystem
+   - Located in: egutjugut.unity only
+   - Manages checkpoints and respawn points
+   
+2. Player Implementation
+   - egutjugut: Third Person Player with full skeleton
+   - 03_Stage2: Simplified Player object
+   
+3. Level Progression
+   - 02_Stage1: Building exploration (tutorial)
+   - 03_Stage2: Candy/Waffle themed platformer (challenge)
+   
+4. Manager Systems
+   - BuffManager, CollectibleManager in egutjugut
+   - InventorySystem in minji
+   
+5. UI/Canvas
+   - egutjugut: Game UI (pause, checkpoint, HUD)
+   - minji: Full menu system (inventory, health, dialogue)
+   - 02_Stage1, 03_Stage2: Minimal UI
+
+================================================================================
+FILE PATHS
+================================================================================
+
+C:/Project_DreamJump/Assets/_Project/Scenes/egutjugut.unity
+C:/Project_DreamJump/Assets/_Project/Scenes/minji.unity
+C:/Project_DreamJump/Assets/_Project/Scenes/02_Stage1.unity
+C:/Project_DreamJump/Assets/_Project/Scenes/03_Stage2.unity

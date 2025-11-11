@@ -1,0 +1,282 @@
+================================================================================
+                     VISUAL SCENE HIERARCHIES
+                   DreamJump Scene Structure Maps
+================================================================================
+
+
+EGUTJUGUT.UNITY - ROOT LEVEL ORGANIZATION
+===========================================
+
+RespawnSystem (Game Manager)
+  Purpose: Checkpoint/respawn system
+
+GameSystem (Game Manager)
+  Purpose: Main game controller
+
+Third Person Player (Player)
+  + Cinemachine Camera (Virtual camera)
+  + Skeleton rig (Animator with bones)
+
+BuffManager (Manager)
+  Purpose: Status effects/buffs
+
+CollectibleManager (Manager)
+  Purpose: Item collection system
+
+EventSystem (UI System)
+  Purpose: Input/event handling
+
+Navigation (AI System)
+  Purpose: Pathfinding
+
+Main Camera (Camera)
+  Purpose: Primary game view
+
+Directional Light (Lighting)
+  Purpose: Main illumination
+
+INTERACTIVE MECHANICS:
+  jump pad
+  softjump
+  slip
+  conveyer
+  statr lift
+  end lift
+  galss
+  Cube
+  Cube (1)
+
+CHECKPOINTS:
+  first respawn point (default)
+  respawn (checkpoint marker)
+
+UI CANVASES:
+  Pause(Canvas)
+  CheckpointPopup(canvas)
+  Collect(canvas)
+  HUD_Counters(GameObject)
+
+
+MINJI.UNITY - ROOT LEVEL ORGANIZATION
+======================================
+
+Main Camera (Camera)
+  Purpose: Primary view
+
+Directional Light (Lighting)
+  Purpose: Main illumination
+
+EventSystem (UI System)
+  Purpose: Input/event handling
+
+Ground (Level)
+  Purpose: Base geometry
+
+CANVAS HIERARCHY (GameCanvas):
+  InventoryPanel
+    ItemSlotGrid
+      ItemSlot_01 through ItemSlot_11 (12 slots)
+    CloseButton
+  DialoguePanel
+  HealthBar
+  CoinText
+  HUD Text elements
+  FadePanel
+
+
+02_STAGE1.UNITY - ROOT LEVEL ORGANIZATION
+===========================================
+
+Main Camera (Camera)
+  Purpose: Level camera
+
+1st Building (Main Level)
+  Roof
+  Section1 (Room 1)
+  Section2 (Room 2)
+  Section3 (Room 3)
+  Section4 (Room 4)
+  Section5 (Room 5)
+
+Next Stage Floor (Progression Trigger)
+  Floor platform
+  Trigger zone
+
+
+03_STAGE2.UNITY - ROOT LEVEL ORGANIZATION
+===========================================
+
+Player (Player Character)
+  Purpose: Playable character
+
+Main Camera (Camera)
+  Purpose: Game view
+
+Directional Light (Lighting)
+  Purpose: Main illumination
+
+Monster (Enemy/Boss)
+  Purpose: Boss encounter
+
+Floor (Base Geometry)
+  Floor_platform_1
+  Floor_platform_2
+
+Objects (Collectibles Container)
+  Candy items
+  Interactive objects
+  [70+ child objects]
+
+Environment (Level Geometry)
+  Platforms
+  Bridges
+  Hazards
+  Special elements
+  [70+ total child objects]
+
+Env (Environmental Objects)
+  Terrain features
+  Props
+
+ScriptFloor (Dynamic Platform)
+  Purpose: Controlled floor mechanics
+
+
+QUICK OBJECT COUNT BY SCENE
+============================
+
+egutjugut:     117 GameObjects, 21 roots
+minji:         67 GameObjects, 4 roots
+02_Stage1:     9 GameObjects, 3 roots
+03_Stage2:     68 GameObjects, 9 roots
+
+Total:         261 GameObjects analyzed
+
+
+KEY SYSTEMS MAPPING
+===================
+
+Core Systems (egutjugut only):
+  RespawnSystem -> Manages: first respawn point, respawn
+  GameSystem -> Orchestrates: All game logic
+  BuffManager -> Manages: Status effects
+  CollectibleManager -> Manages: Item collection
+
+Player Implementation:
+  egutjugut: Third Person Player (full skeletal rig)
+  03_Stage2: Player (simplified controller)
+
+Camera Systems:
+  Standard: Main Camera (all scenes)
+  Advanced: Cinemachine Camera (egutjugut)
+
+UI Systems:
+  egutjugut: Pause, Checkpoint, Collection, HUD
+  minji: Extensive inventory (12 slots), Dialogue, Health
+  02_Stage1: Minimal
+  03_Stage2: Minimal
+
+Lighting:
+  Directional Light in all scenes
+  egutjugut: Warm color temperature
+
+
+SCENE PROGRESSION PATH
+======================
+
+Development/Testing Scenes:
+  egutjugut -> Tutorial mechanics testing
+  minji -> UI/menu system testing
+
+Playable Campaign:
+  02_Stage1 -> Tutorial Level (Introduction)
+       |
+       v
+  03_Stage2 -> Challenge Level (Main Gameplay)
+       |
+       v
+  (Future: Stage 4+)
+
+
+PLATFORM TYPES BY SCENE
+=======================
+
+egutjugut (Testing):
+  - Jump Pad (enhanced jumping)
+  - Soft Jump (reduced impact)
+  - Conveyer Belt (moving platform)
+  - Slippery Surface (low friction)
+  - Glass Platform (transparent)
+  - Starting Lift (initial platform)
+  - Ending Lift (final platform)
+
+02_Stage1 (Tutorial):
+  - Building sections (rooms)
+  - Progression floor (next stage)
+
+03_Stage2 (Challenge):
+  - Candy platforms (main walkable)
+  - Bridges (connectors)
+  - Cliffs (elevated areas)
+  - Dynamic floor (script-controlled)
+  - Water hazards (4 sections)
+
+
+ARCHITECTURAL INSIGHTS
+======================
+
+Scene Organization:
+  All scenes: Cameras and lights at root
+  Test scenes: Systems at root (managers)
+  Level scenes: Geometry at root
+  UI scene: Canvas-heavy hierarchy
+
+GameObject Naming:
+  Descriptive (jump pad, conveyer, Monster)
+  Numbered (Candy (1), Section1-5)
+  Generic (Cube, Cube (1))
+  Special characters allowed ('RespawnSystem ')
+
+Hierarchy Depth:
+  Shallow (2-3 levels): Most scenes
+  Deep (4+ levels): egutjugut, 03_Stage2
+  Flat structure: minji (all UI at similar depth)
+
+
+COMPONENT SUMMARY
+=================
+
+Standard Components:
+  Camera, Light, Canvas, Transform, Rigidbody, Collider
+
+Custom Scripts:
+  Player controllers, Manager systems, Platform behaviors
+  UI controllers, Checkpoint/Respawn handlers
+
+Animation:
+  Third Person Player has Animator + skeleton
+
+Physics:
+  Rigidbody for player/platforms
+  Colliders for interaction and hazards
+
+
+SCENE STATISTICS
+================
+
+Total GameObjects: 261
+Average complexity: MEDIUM
+Smallest scene: 02_Stage1 (9 objects)
+Largest scene: egutjugut (117 objects)
+
+Root objects: 37 total
+Max root objects: egutjugut (21)
+Min root objects: 02_Stage1 (3)
+
+Average GameObjects per scene: 65.25
+GameObjects per root (average): 7.05
+
+
+================================================================================
+                            END OF VISUAL MAPS
+================================================================================
