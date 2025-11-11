@@ -88,7 +88,7 @@ namespace PlatformerGame.Systems.UI
             // 메인게임 씬으로 전환
             if (Scene.SceneController.Instance != null)
             {
-                Scene.SceneController.Instance.LoadScene("02_MainGame");
+                Scene.SceneController.Instance.LoadScene("02_Stage1");
             }
 
             if (Game.GameManager.Instance != null)
