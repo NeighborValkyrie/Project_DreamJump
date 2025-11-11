@@ -118,7 +118,7 @@ CapsuleCollider:
   m_Radius: 0.5
   m_Height: 2
   m_Direction: 1
-  m_Center: {x: 0, y: 0.5, z: 0}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &5904833900413251706
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -135,7 +135,7 @@ MonoBehaviour:
   interactionRange: 1
   interactableLayer:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 8
 --- !u!114 &12350099615380974
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -155,14 +155,11 @@ MonoBehaviour:
   jumpForce: 15
   jumpMultiplier: 1.3
   gravity: 20
-  jumpBufferTime: 0.2
-  coyoteTime: 0.15
-  groundCheckRadius: 0.3
-  groundCheckOffset: {x: 0, y: 0.1, z: 0}
-  groundAngleTolerance: 0.707
+  groundCheckDistance: 0.3
+  groundCheckRadius: 0.4
   groundLayer:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 64
   cameraTransform: {fileID: 0}
 --- !u!114 &7262174642392994463
 MonoBehaviour:
@@ -234,7 +231,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -1429697328490936681, guid: 4e9921581fc3a5c459e5179149f13ddd, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.15
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -1429697328490936681, guid: 4e9921581fc3a5c459e5179149f13ddd, type: 3}
       propertyPath: m_LocalPosition.z
@@ -269,12 +266,20 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7233867138446155668, guid: 4e9921581fc3a5c459e5179149f13ddd, type: 3}
+      propertyPath: m_AABB.m_Center.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7233867138446155668, guid: 4e9921581fc3a5c459e5179149f13ddd, type: 3}
       propertyPath: m_AABB.m_Center.y
-      value: 0.22
+      value: 0.2162121
+      objectReference: {fileID: 0}
+    - target: {fileID: 7233867138446155668, guid: 4e9921581fc3a5c459e5179149f13ddd, type: 3}
+      propertyPath: m_AABB.m_Center.z
+      value: 0.13371271
       objectReference: {fileID: 0}
     - target: {fileID: 7233867138446155668, guid: 4e9921581fc3a5c459e5179149f13ddd, type: 3}
       propertyPath: m_AABB.m_Extent.y
-      value: 0.85
+      value: 0.85378796
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

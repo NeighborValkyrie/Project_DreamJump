@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 62375506924644783}
   - component: {fileID: 5588381403748555139}
   - component: {fileID: 6572090352198855490}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: SlipperyPlatform
   m_TagString: Untagged
   m_Icon: {fileID: 0}

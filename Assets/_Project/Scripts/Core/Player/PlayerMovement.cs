@@ -13,31 +13,37 @@ namespace PlatformerGame.Core.Player
 
         [Header("Jump")]
         [SerializeField] private float jumpForce = 8f;
-        [SerializeField] private float jumpMultiplier = 1f; // JumpingPlatform 호환
+        [SerializeField] private float jumpMultiplier = 1f;
         [SerializeField] private float gravity = 20f;
-        [SerializeField] private float jumpBufferTime = 0.2f;
-        [SerializeField] private float coyoteTime = 0.15f;
 
         [Header("Ground Check")]
-        [SerializeField] private float groundCheckRadius = 0.3f;
-        [SerializeField] private Vector3 groundCheckOffset = new Vector3(0, 0.1f, 0);
-        [SerializeField] private float groundAngleTolerance = 0.707f;
-        [SerializeField] private LayerMask groundLayer;
+        [SerializeField] private float groundCheckDistance = 0.3f;
+        [SerializeField] private float groundCheckRadius = 0.4f;
+        [SerializeField] private LayerMask groundLayer = -1;
 
         [Header("Camera")]
         [SerializeField] private Transform cameraTransform;
 
         private Rigidbody rb;
+        private CapsuleCollider capsule;
         private Vector3 moveDirection;
         private Vector3 currentVelocity;
         private bool isGrounded;
-        private float lastGroundedTime;
-        private float lastJumpPressTime;
-        private float currentSpeedMultiplier = 1f; // 플랫폼 효과용
+        private float currentSpeedMultiplier = 1f;
 
         private void Awake()
         {
             rb = GetComponent<Rigidbody>();
+            capsule = GetComponent<CapsuleCollider>();
+            
+            // 중요: Drag를 0으로!
+            rb.mass = 1f;
+            rb.drag = 0f;  // ← 이게 핵심!
+            rb.angularDrag = 0.05f;
+            rb.useGravity = true;
+            rb.isKinematic = false;
+            rb.interpolation = RigidbodyInterpolation.Interpolate;
+            rb.collisionDetectionMode = CollisionDetectionMode.Continuous;
             rb.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ;
 
             if (cameraTransform == null)
@@ -53,30 +59,42 @@ namespace PlatformerGame.Core.Player
             ApplyMovement();
             ApplyRotation();
             ApplyGravity();
-            HandleJumpBuffer();
         }
 
         private void CheckGroundStatus()
         {
             isGrounded = false;
 
-            // 구체 체크
-            if (Physics.CheckSphere(transform.position + groundCheckOffset, groundCheckRadius, groundLayer))
+            float bottomY = 0f;
+            if (capsule != null)
             {
-                isGrounded = true;
-                lastGroundedTime = Time.time;
+                bottomY = capsule.center.y - (capsule.height * 0.5f) + capsule.radius;
             }
-            else
+
+            Vector3 checkPosition = transform.position + Vector3.up * bottomY;
+
+            RaycastHit hit;
+            if (Physics.SphereCast(
+                checkPosition + Vector3.up * 0.1f,
+                groundCheckRadius,
+                Vector3.down,
+                out hit,
+                groundCheckDistance + 0.1f,
+                groundLayer))
             {
-                // 레이캐스트로 보정 (경사로 대응)
-                RaycastHit hit;
-                if (Physics.Raycast(transform.position, Vector3.down, out hit, 1.1f))
+                if (hit.collider.gameObject != gameObject)
                 {
-                    float angle = Vector3.Dot(hit.normal, Vector3.up);
-                    if (angle >= groundAngleTolerance)
+                    isGrounded = true;
+                }
+            }
+
+            if (!isGrounded)
+            {
+                if (Physics.Raycast(checkPosition, Vector3.down, out hit, groundCheckDistance + 0.2f, groundLayer))
+                {
+                    if (hit.collider.gameObject != gameObject)
                     {
                         isGrounded = true;
-                        lastGroundedTime = Time.time;
                     }
                 }
             }
@@ -87,6 +105,7 @@ namespace PlatformerGame.Core.Player
             if (moveDirection.magnitude < 0.1f)
             {
                 currentVelocity = Vector3.Lerp(currentVelocity, Vector3.zero, deceleration * Time.fixedDeltaTime);
+                if (currentVelocity.magnitude < 0.01f) currentVelocity = Vector3.zero;
             }
             else
             {
@@ -100,7 +119,7 @@ namespace PlatformerGame.Core.Player
 
         private void ApplyRotation()
         {
-            if (currentVelocity.magnitude > 0.1f)
+            if (moveDirection.magnitude > 0.1f && currentVelocity.magnitude > 1f)
             {
                 Quaternion targetRotation = Quaternion.LookRotation(currentVelocity);
                 transform.rotation = Quaternion.RotateTowards(
@@ -116,16 +135,6 @@ namespace PlatformerGame.Core.Player
             if (!isGrounded && rb.velocity.y < 0)
             {
                 rb.velocity += Vector3.down * gravity * Time.fixedDeltaTime;
-            }
-        }
-
-        private void HandleJumpBuffer()
-        {
-            if (Time.time - lastJumpPressTime < jumpBufferTime &&
-                Time.time - lastGroundedTime < coyoteTime)
-            {
-                PerformJump();
-                lastJumpPressTime = -1f;
             }
         }
 
@@ -145,36 +154,19 @@ namespace PlatformerGame.Core.Player
             return (forward * input.z + right * input.x).normalized;
         }
 
-        // 기존 호환성 유지
-        public void SetMoveDirection(Vector3 direction)
-        {
-            moveDirection = direction;
-        }
-
-        // 새로운 입력 방식
-        public void SetMoveInput(Vector3 input)
-        {
-            moveDirection = input;
-        }
+        public void SetMoveDirection(Vector3 direction) => moveDirection = direction;
+        public void SetMoveInput(Vector3 input) => moveDirection = input;
 
         public void Jump()
         {
-            lastJumpPressTime = Time.time;
-
-            if (isGrounded || Time.time - lastGroundedTime < coyoteTime)
+            if (isGrounded)
             {
-                PerformJump();
-            }
-        }
+                rb.velocity = new Vector3(rb.velocity.x, jumpForce * jumpMultiplier, rb.velocity.z);
 
-        private void PerformJump()
-        {
-            rb.velocity = new Vector3(rb.velocity.x, jumpForce * jumpMultiplier, rb.velocity.z);
-            lastGroundedTime = -1f;
-
-            if (PlatformerGame.Systems.Events.GameEventManager.Instance != null)
-            {
-                PlatformerGame.Systems.Events.GameEventManager.Instance.TriggerPlayerJumped();
+                if (PlatformerGame.Systems.Events.GameEventManager.Instance != null)
+                {
+                    PlatformerGame.Systems.Events.GameEventManager.Instance.TriggerPlayerJumped();
+                }
             }
         }
 
@@ -185,25 +177,25 @@ namespace PlatformerGame.Core.Player
             currentVelocity = Vector3.zero;
         }
 
-        // 플랫폼 효과용 (StickyPlatform, JumpingPlatform)
-        public void SetSpeedMultiplier(float multiplier)
-        {
-            currentSpeedMultiplier = multiplier;
-        }
-
-        public void SetCameraTransform(Transform cam)
-        {
-            cameraTransform = cam;
-        }
-
-        // 기존 호환성: PlayerAnimation, UI 등에서 사용
+        public void SetSpeedMultiplier(float multiplier) => currentSpeedMultiplier = multiplier;
+        public void SetCameraTransform(Transform cam) => cameraTransform = cam;
         public bool IsGrounded() => isGrounded;
         public float GetMoveSpeed() => currentVelocity.magnitude;
 
         private void OnDrawGizmosSelected()
         {
+            float bottomY = 0f;
+            CapsuleCollider col = GetComponent<CapsuleCollider>();
+            if (col != null)
+            {
+                bottomY = col.center.y - (col.height * 0.5f) + col.radius;
+            }
+
+            Vector3 checkPosition = transform.position + Vector3.up * bottomY;
+
             Gizmos.color = isGrounded ? Color.green : Color.red;
-            Gizmos.DrawWireSphere(transform.position + groundCheckOffset, groundCheckRadius);
+            Gizmos.DrawWireSphere(checkPosition, groundCheckRadius);
+            Gizmos.DrawLine(checkPosition, checkPosition + Vector3.down * groundCheckDistance);
         }
     }
 }

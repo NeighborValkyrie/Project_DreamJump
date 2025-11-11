@@ -25,11 +25,13 @@ namespace PlatformerGame.Core.Player
 
         private void Start()
         {
+            // GameEventManager 구독
             if (PlatformerGame.Systems.Events.GameEventManager.Instance != null)
             {
                 PlatformerGame.Systems.Events.GameEventManager.Instance.OnPlayerInputStateChanged += SetInputEnabled;
             }
 
+            // 카메라 참조 전달
             UnityEngine.Camera mainCam = UnityEngine.Camera.main;
             if (mainCam != null && movement != null)
             {
@@ -39,6 +41,7 @@ namespace PlatformerGame.Core.Player
 
         private void OnDestroy()
         {
+            // 이벤트 구독 해제
             if (PlatformerGame.Systems.Events.GameEventManager.Instance != null)
             {
                 PlatformerGame.Systems.Events.GameEventManager.Instance.OnPlayerInputStateChanged -= SetInputEnabled;
@@ -58,7 +61,7 @@ namespace PlatformerGame.Core.Player
         {
             float h = Input.GetAxisRaw("Horizontal");
             float v = Input.GetAxisRaw("Vertical");
-            movement.SetMoveInput(new Vector3(h, 0f, v).normalized);
+            movement.SetMoveDirection(new Vector3(h, 0f, v).normalized);
         }
 
         private void HandleJump()
@@ -86,12 +89,13 @@ namespace PlatformerGame.Core.Player
             }
         }
 
+        // UI/GameManager 호환
         public void SetInputEnabled(bool enabled)
         {
             inputEnabled = enabled;
             if (!enabled && movement != null)
             {
-                movement.SetMoveInput(Vector3.zero);
+                movement.SetMoveDirection(Vector3.zero);
             }
         }
 

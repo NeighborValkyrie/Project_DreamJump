@@ -13,11 +13,15 @@ namespace PlatformerGame.Core.Camera
         [SerializeField] private float maxDistance = 10f;
         [SerializeField] private float height = 2f;
 
-        [Header("Mouse")]
-        [SerializeField] private float mouseSensitivity = 2f;
+        [Header("Mouse Follow")]
+        [SerializeField] private bool followMouse = true;
+        [SerializeField] private float mouseInfluence = 30f; // 마우스 영향력
+        [SerializeField] private float mouseSmoothness = 5f;
+
+        [Header("Rotation")]
+        [SerializeField] private float defaultVerticalAngle = 15f;
         [SerializeField] private float minVerticalAngle = -20f;
         [SerializeField] private float maxVerticalAngle = 60f;
-        [SerializeField] private bool invertY = false;
 
         [Header("Smoothness")]
         [SerializeField] private float positionDamping = 5f;
@@ -32,9 +36,10 @@ namespace PlatformerGame.Core.Camera
         [SerializeField] private LayerMask collisionLayers;
 
         private float currentRotationX = 0f;
-        private float currentRotationY = 20f;
+        private float currentRotationY;
         private float targetDistance;
         private Vector3 velocity = Vector3.zero;
+        private Vector2 mouseOffset = Vector2.zero;
 
         private void Start()
         {
@@ -48,9 +53,8 @@ namespace PlatformerGame.Core.Camera
                 }
             }
 
+            currentRotationY = defaultVerticalAngle;
             targetDistance = distance;
-            Cursor.lockState = CursorLockMode.Locked;
-            Cursor.visible = false;
         }
 
         private void LateUpdate()
@@ -64,17 +68,32 @@ namespace PlatformerGame.Core.Camera
 
         private void HandleMouseInput()
         {
-            if (Input.GetMouseButton(1))
+            if (followMouse)
             {
-                float mouseX = Input.GetAxis("Mouse X") * mouseSensitivity;
-                float mouseY = Input.GetAxis("Mouse Y") * mouseSensitivity;
+                // 화면 중앙 대비 마우스 위치 (-1 ~ 1)
+                Vector2 screenCenter = new Vector2(Screen.width * 0.5f, Screen.height * 0.5f);
+                Vector2 mousePos = Input.mousePosition;
+                Vector2 mouseDelta = (mousePos - screenCenter) / screenCenter;
 
-                if (invertY) mouseY = -mouseY;
+                // 부드럽게 적용
+                mouseOffset = Vector2.Lerp(mouseOffset, mouseDelta, mouseSmoothness * Time.deltaTime);
 
-                currentRotationX += mouseX;
-                currentRotationY = Mathf.Clamp(currentRotationY - mouseY, minVerticalAngle, maxVerticalAngle);
+                // 마우스 위치에 따라 카메라 회전
+                currentRotationX = target.eulerAngles.y + mouseOffset.x * mouseInfluence;
+                currentRotationY = Mathf.Clamp(
+                    defaultVerticalAngle - mouseOffset.y * (mouseInfluence * 0.5f),
+                    minVerticalAngle,
+                    maxVerticalAngle
+                );
+            }
+            else
+            {
+                // 마우스 팔로우 끄면 플레이어 뒤
+                currentRotationX = target.eulerAngles.y;
+                currentRotationY = defaultVerticalAngle;
             }
 
+            // ESC로 커서 표시
             if (Input.GetKeyDown(KeyCode.Escape))
             {
                 Cursor.lockState = CursorLockMode.None;
@@ -112,11 +131,6 @@ namespace PlatformerGame.Core.Camera
         }
 
         public void SetTarget(Transform newTarget) => target = newTarget;
-        public void SetMouseSensitivity(float sensitivity) => mouseSensitivity = Mathf.Clamp(sensitivity, 0.1f, 5f);
-        public void ResetRotation()
-        {
-            currentRotationX = 0f;
-            currentRotationY = 20f;
-        }
+        public void SetFollowMouse(bool enable) => followMouse = enable;
     }
 }

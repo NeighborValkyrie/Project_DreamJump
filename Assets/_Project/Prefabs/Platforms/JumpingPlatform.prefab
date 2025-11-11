@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 3274730642151788495}
   - component: {fileID: 2060474216351027496}
   - component: {fileID: 4236520263611642138}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: JumpingPlatform
   m_TagString: Untagged
   m_Icon: {fileID: 0}
