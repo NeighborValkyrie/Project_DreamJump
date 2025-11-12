@@ -3170,34 +3170,18 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 1776894041}
-    - target: {fileID: 826145631217469514, guid: 6338dbcfc800e2a4f97e78e83a561e45, type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: Btn_Quit
-      objectReference: {fileID: 0}
     - target: {fileID: 2916973179079955825, guid: 6338dbcfc800e2a4f97e78e83a561e45, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 1776894041}
-    - target: {fileID: 2916973179079955825, guid: 6338dbcfc800e2a4f97e78e83a561e45, type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: Btn_Continue
-      objectReference: {fileID: 0}
     - target: {fileID: 4428405906247320896, guid: 6338dbcfc800e2a4f97e78e83a561e45, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 1776894041}
-    - target: {fileID: 4428405906247320896, guid: 6338dbcfc800e2a4f97e78e83a561e45, type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: Btn_Respawn
-      objectReference: {fileID: 0}
     - target: {fileID: 7180083802841546768, guid: 6338dbcfc800e2a4f97e78e83a561e45, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 1776894041}
-    - target: {fileID: 7180083802841546768, guid: 6338dbcfc800e2a4f97e78e83a561e45, type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: Btn_MainMenu
-      objectReference: {fileID: 0}
     - target: {fileID: 7320814947535410819, guid: 6338dbcfc800e2a4f97e78e83a561e45, type: 3}
       propertyPath: m_Name
       value: GameUI
