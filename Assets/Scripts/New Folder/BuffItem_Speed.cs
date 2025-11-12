@@ -39,6 +39,7 @@ public class BuffItem_Speed : MonoBehaviour
         float originalSprint = motor.sprintSpeed;
 
         // 버프 시작
+        
         motor.runSpeed *= speedMultiplier;
         motor.sprintSpeed *= speedMultiplier;
         Debug.Log($"[BuffItem_Speed] 속도 버프 시작! 현재 배율: {speedMultiplier}x (지속 {duration:F1}초)");
@@ -46,6 +47,7 @@ public class BuffItem_Speed : MonoBehaviour
         yield return new WaitForSeconds(duration);
 
         // 버프 종료
+        
         motor.runSpeed = originalSpeed;
         motor.sprintSpeed = originalSprint;
         Debug.Log("[BuffItem_Speed] 속도 버프 종료 — 이동속도 원상복귀 완료!");
