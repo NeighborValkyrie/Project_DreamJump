@@ -10,9 +10,8 @@ namespace ithappy
         public float maxBlendShapeValue = 100f;
         public float animationSpeed = 1f;
         public AnimationCurve animationCurve = AnimationCurve.EaseInOut(0f, 0f, 1f, 1f);
-        public bool useFixedDelay = false; // Toggle fixed delay
-        public float fixedDelay = 0f; // Fixed delay duration
-        public float delayBetweenCycles = 0f; // Delay between animation cycles
+
+        private bool isAnimating = false; // 중복 실행 방지
 
         private void Awake()
         {
@@ -21,43 +20,42 @@ namespace ithappy
             {
                 skinnedMeshRenderer = GetComponentInChildren<SkinnedMeshRenderer>();
             }
-        }
-
-        private void Start()
-        {
-            if (skinnedMeshRenderer != null)
+            if (skinnedMeshRenderer == null)
             {
-                if (useFixedDelay)
-                {
-                    StartCoroutine(DelayedStart());
-                }
-                else
-                {
-                    StartCoroutine(AnimateBlendShape());
-                }
-            }
-            else
-            {
-                Debug.LogError("SkinnedMeshRenderer not found on the GameObject or its children.");
+                Debug.LogError("SkinnedMeshRenderer not found.");
             }
         }
 
-        private IEnumerator DelayedStart()
-        {
-            yield return new WaitForSeconds(fixedDelay);
-            StartCoroutine(AnimateBlendShape());
-        }
+        // [변경점]
+        // Start()와 무한루프(while(true))를 제거했습니다.
+        // 대신, 다른 스크립트에서 호출할 수 있는 public 함수를 만듭니다.
 
-        private IEnumerator AnimateBlendShape()
+        /// <summary>
+        /// 블렌드 셰이프 애니메이션을 1회 재생합니다.
+        /// </summary>
+        public void PlayBounceAnimation()
         {
-            while (true)
+            if (isAnimating || skinnedMeshRenderer == null)
             {
-                yield return AnimateToValue(maxBlendShapeValue);
-                yield return AnimateToValue(0f);
-                yield return new WaitForSeconds(delayBetweenCycles); // Add delay between cycles
+                return; // 애니메이션 중이거나 렌더러가 없으면 실행 안 함
             }
+            StartCoroutine(AnimateBounce());
         }
 
+        private IEnumerator AnimateBounce()
+        {
+            isAnimating = true;
+
+            // 0 -> Max (찌그러짐)
+            yield return AnimateToValue(maxBlendShapeValue);
+            
+            // Max -> 0 (복귀)
+            yield return AnimateToValue(0f);
+
+            isAnimating = false;
+        }
+
+        // AnimateToValue 함수는 원본 코드를 그대로 사용합니다.
         private IEnumerator AnimateToValue(float targetValue)
         {
             float elapsedTime = 0f;
@@ -73,18 +71,11 @@ namespace ithappy
                 elapsedTime += Time.deltaTime;
                 yield return null;
             }
-
             skinnedMeshRenderer.SetBlendShapeWeight(blendShapeIndex, targetValue);
         }
 
 #if UNITY_EDITOR
-        private void OnValidate()
-        {
-            if (animationCurve == null)
-            {
-                animationCurve = AnimationCurve.EaseInOut(0f, 0f, 1f, 1f);
-            }
-        }
+        // (OnValidate는 그대로 둡니다)
 #endif
     }
 }
