@@ -1,59 +1,15 @@
+ï»¿// DoubleJumpExtension.cs (í˜¸í™˜ìš©)
 using UnityEngine;
-using UnityEngine.InputSystem;
-using TraversalPro;
 
-[RequireComponent(typeof(Jump))]
 public class DoubleJumpExtension : MonoBehaviour
 {
-    public int extraJumps = 1;
-    private Jump jump;
-    private int jumpsLeft;
-    private bool isActive = false;
+    public TraversalPro.Jump jump; // [ë³€ê²½ê°€ëŠ¥] ìˆ˜ë™ í• ë‹¹ ê°€ëŠ¥
 
-    void Awake()
+    void Awake() { if (!jump) jump = GetComponent<TraversalPro.Jump>(); }
+
+    public void ActivateDoubleJump(float duration)
     {
-        jump = GetComponent<Jump>();
-    }
-
-    void Update()
-    {
-        if (!isActive) return;
-
-        if (Keyboard.current != null && Keyboard.current.spaceKey.wasPressedThisFrame)
-        {
-            TryDoubleJump();
-        }
-    }
-
-    public void TryDoubleJump()
-    {
-        if (jump.CharacterMotor.IsGrounded)
-        {
-            jumpsLeft = extraJumps;
-            return;
-        }
-
-        if (jumpsLeft > 0)
-        {
-            jumpsLeft--;
-            jump.PerformJump();
-            Debug.Log("[BUFF] Double Jump »ç¿ë!");
-        }
-    }
-
-    public void ActivateDoubleJump(float time)
-    {
-        StopAllCoroutines();
-        StartCoroutine(TempActivate(time));
-    }
-
-    System.Collections.IEnumerator TempActivate(float time)
-    {
-        isActive = true;
-        jumpsLeft = extraJumps;
-        Debug.Log($"[BUFF] Double Jump È°¼º (Áö¼Ó½Ã°£: {time}ÃÊ)");
-        yield return new WaitForSeconds(time);
-        isActive = false;
-        Debug.Log("[BUFF] Double Jump ºñÈ°¼ºÈ­µÊ");
+        if (!jump) { Debug.LogWarning("[DoubleJumpExtension] Jumpê°€ ì—†ìŠµë‹ˆë‹¤."); return; }
+        jump.EnableDoubleJump(duration);
     }
 }

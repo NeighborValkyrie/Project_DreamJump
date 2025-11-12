@@ -1,47 +1,36 @@
+﻿using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using static TraversalPro.Utility;
 
 namespace TraversalPro
 {
-    /// <summary>
-    /// Applies instantaneous upward acceleration to this character to simulate jumping.
-    /// A Rigidbody component and an <see cref="IGrounding"/> are required to be attached to this GameObject.
-    /// </summary>
     [RequireComponent(typeof(ICharacterMotor))]
     [AddComponentMenu("Traversal Pro/Character Physics/Jump")]
     public class Jump : MonoBehaviour, IJump
     {
-        [Tooltip("Approximately how high in meters the character will jump.")]
-        [Min(0)] public float height = 1;
-        [Tooltip("How long in seconds after jumping before the character can jump again.")] 
-        [Min(0)] public float cooldownDuration = .5f;
-        [Tooltip("How long in seconds the character can perform a jump before becoming grounded or after becoming ungrounded.")]
-        [Min(0)] public float graceDuration = .1f;
-        [Tooltip("How long in seconds to wait after a successful jump input before the jump force is applied+.")]
-        [Min(0)] public float delay = .1f;
-        [Tooltip("The max force in newtons to apply to the ground when jumping.")]
-        [Min(0)] public float maxGroundForce = 100000;
-        [Tooltip("Optional. The IFeeFall component attached to this character if any.")]
-        public InterfaceRef<IFreeFall> freeFall;
+        [Header("Jump")]
+        [Min(0)] public float height = 1f;                 // [변경가능]
+        [Min(0)] public float cooldownDuration = .5f;      // [변경가능]
+        [Min(0)] public float graceDuration = .1f;         // [변경가능] (코요테 타임)
+        [Min(0)] public float delay = .1f;                 // [변경가능] (입력~적용 지연)
+        [Min(0)] public float maxGroundForce = 100000;     // [변경가능]
+
+        [Header("Double Jump")]
+        public int maxExtraJumps = 0;                      // [변경가능] (버프 시 1)
+        int extraJumpsLeft = 0;
+
         InterfaceRef<ICharacterMotor> characterMotor;
-        double jumpRequestTime;
-        double jumpForceTime = double.MaxValue;
-        double lastGroundedTime;
+        double jumpRequestTime, jumpForceTime = double.MaxValue, lastGroundedTime;
         const float recentJumpDuration = .2f;
-        
         public double LastJumpTime { get; private set; }
 
-        public Rigidbody Rigidbody => characterMotor.Value.Rigidbody;
-
-        void OnValidate()
-        {
-            freeFall.Value ??= GetComponent<IFreeFall>();
-        }
+        Rigidbody RB => characterMotor.Value.Rigidbody;
 
         void Awake()
         {
-            if (!TryValidateRequiredComponent(this, ref characterMotor)) enabled = false;
+            var cm = GetComponent<ICharacterMotor>();
+            if (cm == null) { Debug.LogError("[Jump] ICharacterMotor가 없습니다."); enabled = false; return; }
+            characterMotor.Value = cm;
         }
 
         void OnEnable()
@@ -57,81 +46,103 @@ namespace TraversalPro
 
         void CheckForJump(ICharacterMotor _)
         {
-            double time = Time.timeAsDouble;
-            if (characterMotor.Value.IsGrounded) lastGroundedTime = time;
+            double t = Time.timeAsDouble;
+
+            if (characterMotor.Value.IsGrounded)
+            {
+                lastGroundedTime = t;
+                extraJumpsLeft = Mathf.Max(0, maxExtraJumps);
+            }
+
             if (ShouldJump())
             {
-                LastJumpTime = time;
-                jumpForceTime = time + delay;
+                LastJumpTime = t;
+                jumpForceTime = t + delay;
             }
-            if (time >= jumpForceTime)
+
+            if (t >= jumpForceTime)
             {
                 jumpForceTime = double.MaxValue;
                 PerformJump();
             }
-            if (time >= LastJumpTime + delay 
-                && time <= LastJumpTime + delay + recentJumpDuration)
-            {
+
+            if (t >= LastJumpTime + delay && t <= LastJumpTime + delay + recentJumpDuration)
                 characterMotor.Value.IsGrounded = false;
-            }
         }
 
         bool ShouldJump()
         {
-            if (jumpRequestTime == 0) return false; // uninitialized
-            double time = Time.timeAsDouble;
-            if (time < jumpRequestTime) return false; // future
-            if (time > jumpRequestTime + graceDuration) return false; // too old
+            if (jumpRequestTime == 0) return false;
+            double t = Time.timeAsDouble;
+            if (t < jumpRequestTime) return false;
+            if (t > jumpRequestTime + graceDuration) return false;
             if (characterMotor.Value.IsOnSteepSlope) return false;
-            if (jumpRequestTime < LastJumpTime + cooldownDuration) return false; // needs cooldown
-            if (characterMotor.Value.IsGrounded) return true;
-            if (time < lastGroundedTime + graceDuration) return true; // within grace time
+
+            bool groundedOrCoyote = characterMotor.Value.IsGrounded || (t < lastGroundedTime + graceDuration);
+
+            // 지상/코요테: 쿨다운 체크
+            if (groundedOrCoyote)
+            {
+                if (jumpRequestTime < LastJumpTime + cooldownDuration) return false;
+                return true;
+            }
+
+            // 공중: 더블점프 (쿨다운 미적용)
+            if (extraJumpsLeft > 0) { extraJumpsLeft--; return true; }
+
             return false;
         }
 
-        /// <summary>
-        /// Immediately apply upward acceleration to this character and downward force on the ground to simulate a jump.
-        /// </summary>
         public void PerformJump()
         {
             if (Time.deltaTime <= 0) return;
-            Vector3 velocity = characterMotor.Value.Rigidbody.GetVelocity();
-            float gravityValue = GetGravity(characterMotor.Value.Rigidbody, freeFall.Value).y;
-            float jumpVelocity = JumpSpeed(gravityValue, height);
-            float priorVelocityY = velocity.y;
-            velocity.y = jumpVelocity + characterMotor.Value.Ground.PointVelocity.y;
-            characterMotor.Value.Rigidbody.SetVelocity(velocity);
+
+            Vector3 v = RB.velocity;
+            float gy = Physics.gravity.y; // 단순 중력 사용
+            float jumpV = CalcJumpSpeed(gy, height);
+            float priorY = v.y;
+
+            v.y = jumpV + characterMotor.Value.Ground.PointVelocity.y;
+            RB.velocity = v;
+
             if (characterMotor.Value.Ground.Rigidbody)
             {
-                float mass = characterMotor.Value.Rigidbody.mass;
-                float force = (velocity.y - priorVelocityY) / Time.deltaTime * mass;
+                float mass = RB.mass;
+                float force = (v.y - priorY) / Time.deltaTime * mass;
                 force = Mathf.Clamp(force, 0, maxGroundForce);
-                float gravityForce = gravityValue * mass;
+                float gravityForce = gy * mass;
                 Vector3 groundForce = new Vector3(0, gravityForce - force, 0);
                 characterMotor.Value.Ground.Rigidbody.AddForceAtPosition(groundForce, characterMotor.Value.Ground.Point, ForceMode.Force);
             }
         }
-        
-        public void RequestJump()
+
+        static float CalcJumpSpeed(float gravityY, float heightMeters)
         {
-            jumpRequestTime = Time.timeAsDouble;
+            return Mathf.Sqrt(Mathf.Max(0.0001f, 2f * Mathf.Abs(gravityY) * heightMeters));
         }
-        
-        /// <summary>
-        /// Request a jump using Unity's Input System. Various jump rules will be checked to determine
-        /// if a jump is allowed. The jump may occur on a later frame.
-        /// </summary>
+
+        public void RequestJump() => jumpRequestTime = Time.timeAsDouble;
+
         public void RequestJump(InputAction.CallbackContext context)
         {
             if (!isActiveAndEnabled) return;
-            if (context.phase == InputActionPhase.Started)
-            {
-                RequestJump();
-            }
+            if (context.phase == InputActionPhase.Started) RequestJump();
         }
-        // Jump.cs ���� �� �Ʒ� �߰�
-        public TraversalPro.ICharacterMotor CharacterMotor => characterMotor.Value;
 
+        // 버프에서 호출
+        public void EnableDoubleJump(float duration) { StartCoroutine(DoubleJumpRoutine(duration)); }
+
+        IEnumerator DoubleJumpRoutine(float duration)
+        {
+            maxExtraJumps = Mathf.Max(1, maxExtraJumps);
+            extraJumpsLeft = Mathf.Max(1, extraJumpsLeft);
+            Debug.Log($"[BUFF] 더블 점프 시작 ({duration:0.##}s)");
+            float end = Time.time + Mathf.Max(0.01f, duration);
+            while (Time.time < end) yield return null;
+            maxExtraJumps = 0;
+            extraJumpsLeft = 0;
+            Debug.Log("[BUFF] 더블 점프 종료");
+        }
+        public Rigidbody Rigidbody => characterMotor.Value.Rigidbody;
     }
-
 }
