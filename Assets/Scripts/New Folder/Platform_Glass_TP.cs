@@ -1,40 +1,44 @@
-// Platform_Glass_TP_Fix.cs
+ï»¿// Platform_Glass_TP_Fix.cs
 using System.Collections;
-using System.Diagnostics;
 using TraversalPro;
 using UnityEngine;
 
 [RequireComponent(typeof(Collider))]
 public class Platform_Glass_TP_Fix : MonoBehaviour
 {
+    public enum BreakTrigger { WhileStanding, AfterFirstStep, AfterStepOff } // [ë³€ê²½ê°€ëŠ¥]
+
     [Header("Config")]
-    public float breakAfter = 1.2f;
-    public GameObject shatterVFX;          // [¼±ÅÃ]
-    public AudioClip breakSFX;              // [¼±ÅÃ]
-    public bool destroyObject = false;      // ¡Ú ÀÚµ¿ Àç»ı¼º »ç¿ë ½Ã false ±ÇÀå
-    public float disableDelay = 0.0f;       // VFX/SFX Àç»ı ½Ã°£ È®º¸¿ë
+    public BreakTrigger breakTrigger = BreakTrigger.AfterFirstStep; // [ë³€ê²½ê°€ëŠ¥] ê¸°ë³¸: ë°Ÿì€ ì§í›„ íƒ€ì´ë¨¸
+    public float breakAfter = 1.2f;                                  // [ë³€ê²½ê°€ëŠ¥]
+    public GameObject shatterVFX;                                    // [ì„ íƒ]
+    public AudioClip breakSFX;                                       // [ì„ íƒ]
+    public bool destroyObject = false;                               // ìë™ ì¬ìƒì„± ì“°ë ¤ë©´ false ê¶Œì¥
+    public float disableDelay = 0.0f;                                // VFX/SFX ì¬ìƒ ì—¬ìœ 
 
     [Header("References")]
-    public Collider solidCollider;          // ºÎ¸ğÀÇ 'ºñ-Æ®¸®°Å' Äİ¶óÀÌ´õ
-    public Collider[] extraSolidColliders;  // Ãß°¡ Äİ¶óÀÌ´õµé(ÀÖÀ¸¸é)
-    public Renderer[] renderersToHide;      // ¼û±æ ·»´õ·¯(ÀÖÀ¸¸é)
+    public Collider solidCollider;           // ë¶€ëª¨ì˜ 'ë¹„-íŠ¸ë¦¬ê±°' ì½œë¼ì´ë”
+    public Collider[] extraSolidColliders;   // ì¶”ê°€ ì½œë¼ì´ë”ë“¤
+    public Renderer[] renderersToHide;       // ìˆ¨ê¸¸ ë Œë”ëŸ¬
 
     [Header("Auto Respawn")]
-    public bool autoRespawn = true;         // ±úÁø µÚ ÀÚµ¿ Àç»ı¼º
-    public float autoRespawnDelay = 3.0f;   // Àç»ı¼º Áö¿¬(ÃÊ)
-    public bool resetOnPlayerRespawn = true;// ÇÃ·¹ÀÌ¾î ¸®½ºÆù ½Ã Áï½Ã º¹±¸
+    public bool autoRespawn = true;          // ê¹¨ì§„ ë’¤ ìë™ ì¬ìƒì„±
+    public float autoRespawnDelay = 3.0f;    // ì¬ìƒì„± ì§€ì—°
+    public bool resetOnPlayerRespawn = true; // í”Œë ˆì´ì–´ ë¦¬ìŠ¤í° ì‹œ ì¦‰ì‹œ ë³µêµ¬
 
     float stayTimer;
     bool broken;
+    bool armed;                               // íƒ€ì´ë¨¸ ë¬´ì¥ ì—¬ë¶€(ì¤‘ë³µ ë°©ì§€)
     Collider sensor;
     Coroutine respawnRoutine;
+    Coroutine breakSchedule;                  // ì˜ˆì•½ ì½”ë£¨í‹´ í•¸ë“¤
 
     void Awake()
     {
         sensor = GetComponent<Collider>();
         sensor.isTrigger = true;
         if (!solidCollider)
-            UnityEngine.Debug.LogWarning("[Glass] solidCollider¸¦ ÇÒ´çÇÏ¼¼¿ä (ºÎ¸ğÀÇ ºñ-Æ®¸®°Å Äİ¶óÀÌ´õ).");
+            Debug.LogWarning("[Glass] solidColliderë¥¼ í• ë‹¹í•˜ì„¸ìš” (ë¶€ëª¨ì˜ ë¹„-íŠ¸ë¦¬ê±° ì½œë¼ì´ë”).");
     }
 
     void OnEnable()
@@ -47,19 +51,57 @@ public class Platform_Glass_TP_Fix : MonoBehaviour
         if (resetOnPlayerRespawn) RespawnManager.OnRespawn -= HandleRespawn;
     }
 
+    void OnTriggerEnter(Collider other)
+    {
+        if (!other.GetComponentInParent<CharacterMotor>()) return;
+        if (broken) return;
+
+        // âœ… ë°Ÿì€ 'ì¦‰ì‹œ' íƒ€ì´ë¨¸ ì‹œì‘
+        if (breakTrigger == BreakTrigger.AfterFirstStep && !armed)
+        {
+            ArmAndSchedule();
+        }
+    }
+
     void OnTriggerStay(Collider other)
     {
         if (!other.GetComponentInParent<CharacterMotor>()) return;
         if (broken) return;
 
-        stayTimer += Time.deltaTime;
-        if (stayTimer >= breakAfter) BreakNow();
+        // (êµ¬ë²„ì „ ë™ì‘) ë°Ÿê³  'ì˜¬ë¼ì„œ ìˆëŠ” ë™ì•ˆ' ëˆ„ì 
+        if (breakTrigger == BreakTrigger.WhileStanding)
+        {
+            stayTimer += Time.deltaTime;
+            if (stayTimer >= breakAfter) BreakNow();
+        }
     }
 
     void OnTriggerExit(Collider other)
     {
         if (!other.GetComponentInParent<CharacterMotor>()) return;
-        stayTimer = 0f;
+
+        // WhileStanding ëª¨ë“œì¼ ë•Œë§Œ ëˆ„ì  ì´ˆê¸°í™”
+        if (breakTrigger == BreakTrigger.WhileStanding)
+            stayTimer = 0f;
+
+        // âœ… ë°œì„ ë—€ 'ì´í›„' íƒ€ì´ë¨¸ ì‹œì‘
+        if (breakTrigger == BreakTrigger.AfterStepOff && !broken && !armed)
+        {
+            ArmAndSchedule();
+        }
+    }
+
+    void ArmAndSchedule()
+    {
+        armed = true;
+        if (breakSchedule != null) StopCoroutine(breakSchedule);
+        breakSchedule = StartCoroutine(ScheduleBreak(breakAfter));
+    }
+
+    IEnumerator ScheduleBreak(float delay)
+    {
+        if (delay > 0) yield return new WaitForSeconds(delay);
+        BreakNow();
     }
 
     void BreakNow()
@@ -70,7 +112,7 @@ public class Platform_Glass_TP_Fix : MonoBehaviour
         if (shatterVFX) Instantiate(shatterVFX, transform.position, transform.rotation);
         if (breakSFX) AudioSource.PlayClipAtPoint(breakSFX, transform.position, 1f);
 
-        // Ãæµ¹/¼¾¼­/ºñÁÖ¾ó ºñÈ°¼ºÈ­
+        // ì¶©ëŒ/ì„¼ì„œ/ë¹„ì£¼ì–¼ ë¹„í™œì„±í™”
         if (solidCollider) solidCollider.enabled = false;
         if (extraSolidColliders != null) foreach (var col in extraSolidColliders) if (col) col.enabled = false;
         if (sensor) sensor.enabled = false;
@@ -78,13 +120,11 @@ public class Platform_Glass_TP_Fix : MonoBehaviour
 
         if (destroyObject)
         {
-            // ÆÄ±« ¸ğµå: ÀÚµ¿ Àç»ı¼ºÀ» ÀÌ ½ºÅ©¸³Æ®¿¡¼­ ¸øÇÔ(¿ÀºêÁ§Æ®°¡ »ç¶óÁö¹Ç·Î)
-            // ¡æ GlassRespawnSpawner »ç¿ë ÇÊ¿ä
             StartCoroutine(DestroyAfter(disableDelay));
             return;
         }
 
-        // ÀÚµ¿ Àç»ı¼º
+        // ìë™ ì¬ìƒì„±
         if (autoRespawn)
         {
             if (respawnRoutine != null) StopCoroutine(respawnRoutine);
@@ -100,16 +140,18 @@ public class Platform_Glass_TP_Fix : MonoBehaviour
 
     void HandleRespawn()
     {
-        // ÇÃ·¹ÀÌ¾î ¸®½ºÆù ½Ã Áï½Ã º¹±¸
+        // í”Œë ˆì´ì–´ ë¦¬ìŠ¤í° ì‹œ ì¦‰ì‹œ ë³µêµ¬
         if (respawnRoutine != null) { StopCoroutine(respawnRoutine); respawnRoutine = null; }
+        if (breakSchedule != null) { StopCoroutine(breakSchedule); breakSchedule = null; }
         if (!destroyObject) ResetGlass();
-        // destroyObject==true¶ó¸é Spawner°¡ »õ·Î »ı¼ºÇØ¾ß ÇÔ
     }
 
     public void ResetGlass()
     {
         stayTimer = 0f;
         broken = false;
+        armed = false;
+        breakSchedule = null;
 
         if (solidCollider) solidCollider.enabled = true;
         if (extraSolidColliders != null) foreach (var col in extraSolidColliders) if (col) col.enabled = true;

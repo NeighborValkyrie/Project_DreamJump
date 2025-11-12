@@ -3,137 +3,166 @@ using System.Collections;
 
 namespace ithappy
 {
+    [DisallowMultipleComponent]
     public class BlendShapeAnimator : MonoBehaviour
     {
-        private SkinnedMeshRenderer skinnedMeshRenderer;
-        
-        // [Header("Bounce Animation (밟았을 때)")]
+        [Header("Target")]
+        public SkinnedMeshRenderer target;               // [변경가능] 직접 지정 권장
+
         [Header("Bounce Animation (밟았을 때)")]
-        public int blendShapeIndex = 0;
-        public float maxBlendShapeValue = 100f; // 밟았을 때의 강도
-        public float animationSpeed = 1f;     // 밟았을 때의 속도
-        public AnimationCurve animationCurve = AnimationCurve.EaseInOut(0f, 0f, 1f, 1f);
+        public int blendShapeIndex = 0;                  // [변경가능]
+        public float maxBlendShapeValue = 100f;          // [변경가능]
+        public float animationSpeed = 1f;                // [변경가능]
+        public AnimationCurve animationCurve =           // [변경가능]
+            AnimationCurve.EaseInOut(0f, 0f, 1f, 1f);
 
-        // [Header("Idle Animation (평소에)")]
         [Header("Idle Animation (평소에)")]
-        public bool playIdleAnimation = true; // 평소에 흔들거릴지 여부
-        public float idleMaxValue = 20f;      // 평소 흔들림의 강도
-        public float idleSpeed = 0.5f;        // 평소 흔들림의 속도
-        public float idleDelay = 0.1f;        // 흔들림 사이의 딜레이
+        public bool playIdleAnimation = true;            // [변경가능]
+        public float idleMaxValue = 20f;                 // [변경가능]
+        public float idleSpeed = 0.5f;                   // [변경가능]
+        public float idleDelay = 0.1f;                   // [변경가능]
 
-        private bool isAnimating = false; // 현재 '바운스' 애니메이션 중인지 확인
-        private Coroutine idleCoroutine;  // '대기' 애니메이션 코루틴을 저장할 변수
+        [Header("Safety")]
+        public bool autoDisableIfMissing = true;         // [변경가능] SMR/블렌드셰이프 없으면 자동 비활성화
+        public bool warnOnceIfMissing = true;            // [변경가능] 경고 1회만 표시
 
-        private void Awake()
+        bool hasRenderer;
+        bool hasBlendShapes;
+        bool isAnimating;
+        Coroutine idleCoroutine;
+
+        void Awake()
         {
-            skinnedMeshRenderer = GetComponent<SkinnedMeshRenderer>();
-            if (skinnedMeshRenderer == null)
+            // 타겟 자동 탐색 (직접 할당이 최우선)
+            if (!target) target = GetComponent<SkinnedMeshRenderer>();
+            if (!target) target = GetComponentInChildren<SkinnedMeshRenderer>();
+            hasRenderer = target != null;
+
+            // 블렌드셰이프 존재 여부 확인
+            hasBlendShapes = hasRenderer && target.sharedMesh && target.sharedMesh.blendShapeCount > 0;
+            if (hasBlendShapes)
             {
-                skinnedMeshRenderer = GetComponentInChildren<SkinnedMeshRenderer>();
+                // 인덱스 범위 클램프
+                blendShapeIndex = Mathf.Clamp(blendShapeIndex, 0, target.sharedMesh.blendShapeCount - 1);
             }
-            if (skinnedMeshRenderer == null)
+
+            // 없으면 자동 비활성화/경고 처리
+            if (!hasRenderer || !hasBlendShapes)
             {
-                Debug.LogError("SkinnedMeshRenderer not found.");
+                if (warnOnceIfMissing)
+                {
+                    string why = !hasRenderer ? "SkinnedMeshRenderer 없음" : "블렌드셰이프 없음";
+                    Debug.LogWarning($"[BlendShapeAnimator] 비활성화: {why}. (오브젝트: {name})");
+                }
+                if (autoDisableIfMissing) enabled = false;
             }
         }
 
-        private void Start()
+        void OnEnable()
         {
-            // 게임이 시작되면 '대기' 애니메이션을 시작합니다.
-            if (playIdleAnimation && skinnedMeshRenderer != null)
+            // 안전 가드
+            if (!hasRenderer || !hasBlendShapes || target == null)
             {
+                enabled = false;
+                return;
+            }
+
+            if (playIdleAnimation)
+            {
+                // 시작 시 아이들 루프
+                if (idleCoroutine != null) StopCoroutine(idleCoroutine);
                 idleCoroutine = StartCoroutine(IdleLoop());
             }
         }
 
-        /// <summary>
-        /// (JellyPlatform 스크립트 등이 호출) 
-        /// 밟았을 때 '바운스' 애니메이션을 1회 재생합니다.
-        /// </summary>
+        void OnDisable()
+        {
+            if (idleCoroutine != null) { StopCoroutine(idleCoroutine); idleCoroutine = null; }
+            isAnimating = false;
+        }
+
+        // 외부(예: JellyPlatform)가 호출: 밟혔을 때 1회 바운스
         public void PlayBounceAnimation()
         {
-            if (isAnimating || skinnedMeshRenderer == null)
-            {
-                return; // 이미 바운스 중이면 중복 실행 안 함
-            }
+            if (!enabled || !hasRenderer || !hasBlendShapes || target == null) return;
+            if (isAnimating) return;
 
-            // 1. '대기' 애니메이션을 하고 있었다면 즉시 중지시킵니다.
             if (idleCoroutine != null)
             {
                 StopCoroutine(idleCoroutine);
                 idleCoroutine = null;
             }
-
-            // 2. '바운스' 애니메이션을 시작합니다.
             StartCoroutine(AnimateBounce());
         }
 
-        // '바운스' 애니메이션 코루틴 (밟혔을 때)
-        private IEnumerator AnimateBounce()
+        IEnumerator AnimateBounce()
         {
-            isAnimating = true; // 바운스 시작
+            isAnimating = true;
+            yield return AnimateToValue(maxBlendShapeValue, animationSpeed);
+            yield return AnimateToValue(0f, animationSpeed);
+            isAnimating = false;
 
-            yield return AnimateToValue(maxBlendShapeValue, animationSpeed); // 밟는 속도
-            yield return AnimateToValue(0f, animationSpeed); // 튕겨나는 속도
-
-            isAnimating = false; // 바운스 끝
-
-            // 3. '바운스'가 끝났으니 다시 '대기' 애니메이션을 시작합니다.
-            if (playIdleAnimation)
+            if (playIdleAnimation && enabled && target != null)
             {
                 idleCoroutine = StartCoroutine(IdleLoop());
             }
         }
 
-        // '대기' 애니메이션 코루틴 (평소)
-        private IEnumerator IdleLoop()
+        IEnumerator IdleLoop()
         {
-            while (true)
+            while (enabled && target != null)
             {
-                // 평소 속도로 idleMaxValue까지 이동
                 yield return AnimateToValue(idleMaxValue, idleSpeed);
-                
-                // 평소 속도로 0f까지 복귀
-                yield return AnimateToValue(0f, idleSpeed);
+                if (!enabled || target == null) yield break;
 
-                // 잠깐 대기
+                yield return AnimateToValue(0f, idleSpeed);
+                if (!enabled || target == null) yield break;
+
                 yield return new WaitForSeconds(idleDelay);
             }
         }
 
-        // [변경]
-        // AnimateToValue가 'speed'를 파라미터로 받도록 수정
-        // (바운스 속도와 대기 속도를 구분하기 위함)
-        private IEnumerator AnimateToValue(float targetValue, float speed)
+        IEnumerator AnimateToValue(float targetValue, float speed)
         {
-            float elapsedTime = 0f;
-            float initialBlendShapeValue = skinnedMeshRenderer.GetBlendShapeWeight(blendShapeIndex);
+            if (target == null) yield break; // 런타임에 제거/파괴된 경우 안전 탈출
 
-            // 속도가 0 이하면 오류가 날 수 있으므로 방지
             float duration = (speed > 0f) ? (1f / speed) : 0f;
-
-            if (duration == 0f)
+            if (duration <= 0f)
             {
-                // 속도가 0이면 즉시 값 설정 후 종료
-                skinnedMeshRenderer.SetBlendShapeWeight(blendShapeIndex, targetValue);
+                SafeSetWeight(targetValue);
                 yield break;
             }
 
-            while (elapsedTime < duration)
+            float elapsed = 0f;
+            float startValue = SafeGetWeight();
+
+            while (elapsed < duration && enabled && target != null)
             {
-                float normalizedTime = elapsedTime / duration;
-                float curveValue = animationCurve.Evaluate(normalizedTime);
-                float newBlendShapeValue = Mathf.Lerp(initialBlendShapeValue, targetValue, curveValue);
-                skinnedMeshRenderer.SetBlendShapeWeight(blendShapeIndex, newBlendShapeValue);
-                elapsedTime += Time.deltaTime;
+                float t = elapsed / duration;
+                float k = animationCurve != null ? animationCurve.Evaluate(t) : t;
+                SafeSetWeight(Mathf.Lerp(startValue, targetValue, k));
+                elapsed += Time.deltaTime;
                 yield return null;
             }
-
-            skinnedMeshRenderer.SetBlendShapeWeight(blendShapeIndex, targetValue);
+            SafeSetWeight(targetValue);
         }
 
-#if UNITY_EDITOR
-        // (OnValidate는 그대로 둡니다)
-#endif
+        float SafeGetWeight()
+        {
+            if (target == null) return 0f;
+            int count = target.sharedMesh ? target.sharedMesh.blendShapeCount : 0;
+            if (count == 0) return 0f;
+            int idx = Mathf.Clamp(blendShapeIndex, 0, count - 1);
+            return target.GetBlendShapeWeight(idx);
+        }
+
+        void SafeSetWeight(float value)
+        {
+            if (target == null) return;
+            int count = target.sharedMesh ? target.sharedMesh.blendShapeCount : 0;
+            if (count == 0) return;
+            int idx = Mathf.Clamp(blendShapeIndex, 0, count - 1);
+            target.SetBlendShapeWeight(idx, Mathf.Clamp(value, 0f, 100f));
+        }
     }
 }
