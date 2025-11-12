@@ -6,6 +6,8 @@ using TraversalPro;
 [DefaultExecutionOrder(-1500)] // CharacterRun(-2000) 뒤, CharacterMotor(-1000) 앞
 public class Platform_Conveyor_TP_CM_Fix : MonoBehaviour
 {
+    public enum FlowMode { Vector, Downhill }   // [변경가능: 필요 없으면 Vector만 쓰기]
+    public FlowMode flow = FlowMode.Vector;
     public enum SpaceMode { World, Local }
 
     [Header("컨베이어 흐름")]
@@ -94,6 +96,7 @@ public class Platform_Conveyor_TP_CM_Fix : MonoBehaviour
             if (Vector3.Dot(worldFlow.normalized, worldMoveDir) >= 0f) return;
         }
 
+       
         // 3) 목표속도 보정(월드 벡터 가산)
         motor.LocalVelocityGoal += worldFlow;
 
