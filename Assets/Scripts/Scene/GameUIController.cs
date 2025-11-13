@@ -12,7 +12,6 @@ public class GameUIController : MonoBehaviour
     
     [Header("Pause Menu Buttons")]
     [SerializeField] private Button resumeButton;
-    [SerializeField] private Button restartButton;
     [SerializeField] private Button titleButton;
     [SerializeField] private Button settingsButton;
     [SerializeField] private Button quitButton;
@@ -21,8 +20,8 @@ public class GameUIController : MonoBehaviour
     [SerializeField] private GameObject settingsPanel;
     
     [Header("Scene Names")]
-    [SerializeField] private string titleSceneName = "Title";
-    [SerializeField] private string currentSceneName;
+    [SerializeField] private string titleSceneName = "01_TitleScene";
+
     
     private bool isPaused = false;
     
@@ -32,8 +31,7 @@ public class GameUIController : MonoBehaviour
     
     private void Start()
     {
-        // 현재 씬 이름 저장
-        currentSceneName = SceneManager.GetActiveScene().name;
+
         
         // 초기 UI 설정
         if (pauseMenuPanel != null) pauseMenuPanel.SetActive(false);
@@ -47,7 +45,6 @@ public class GameUIController : MonoBehaviour
         
         // 버튼 이벤트 연결
         if (resumeButton != null) resumeButton.onClick.AddListener(ResumeGame);
-        if (restartButton != null) restartButton.onClick.AddListener(RestartGame);
         if (titleButton != null) titleButton.onClick.AddListener(ReturnToTitle);
         if (settingsButton != null) settingsButton.onClick.AddListener(OpenSettings);
         if (quitButton != null) quitButton.onClick.AddListener(QuitGame);
@@ -84,19 +81,7 @@ public class GameUIController : MonoBehaviour
         Time.timeScale = 1f;
     }
     
-    // 게임 다시하기 (리스폰)
-    public void RestartGame()
-    {
-        // 일시정지 상태 해제
-        isPaused = false;
-        if (pauseMenuPanel != null) pauseMenuPanel.SetActive(false);
-        Time.timeScale = 1f;
-        
-        // 리스폰 요청 이벤트 발생
-        OnPlayerRespawnRequested?.Invoke();
-        
-        // function.cs가 이 이벤트를 구독하여 처리하도록 함
-    }
+
     
     // 타이틀로 돌아가기
     public void ReturnToTitle()
@@ -105,7 +90,7 @@ public class GameUIController : MonoBehaviour
         Time.timeScale = 1f;
         
         // 타이틀 씬으로 로드
-        SceneManager.LoadScene(titleSceneName);
+        SceneManager.LoadScene("01_TitleScene");
     }
     
     // 설정 메뉴 열기
