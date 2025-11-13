@@ -147,12 +147,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 276540197}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 1730590738}
+  m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &276540199
 MonoBehaviour:
@@ -169,10 +169,9 @@ MonoBehaviour:
   bgmSource: {fileID: 0}
   sfxSource: {fileID: 0}
   titleBGM: {fileID: 8300000, guid: e98eabe3ffda55f459ed2b5bcd73ea5b, type: 3}
-  gameBGM: {fileID: 8300000, guid: dbb578a04268dd6459a2b95894c8a8f9, type: 3}
-  storyBGM: {fileID: 8300000, guid: f3ee1a1312fec124788ae7ac752587cb, type: 3}
-  bgmVolume: 0.7
-  sfxVolume: 1
+  gameBGM: {fileID: 8300000, guid: f61213dc073dd704f957c13ba81b000b, type: 3}
+  bgmVolume: 0.437
+  sfxVolume: 0.508
   fadeDuration: 1
 --- !u!1001 &389352331
 PrefabInstance:
@@ -467,7 +466,7 @@ MonoBehaviour:
   quitButton: {fileID: 1345383099661878203}
   settingsPanel: {fileID: 3976670701588072282}
   controlsPanel: {fileID: 6843874059251327592}
-  firstLevelScene: 02_MainGame
+  firstLevelScene: Movie
 --- !u!1 &705507993
 GameObject:
   m_ObjectHideFlags: 0
@@ -928,7 +927,6 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1086820355}
-  - {fileID: 276540198}
   - {fileID: 389352332}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -4743,9 +4741,10 @@ CanvasRenderer:
 SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
+  - {fileID: 276540198}
+  - {fileID: 1730590738}
   - {fileID: 963194228}
   - {fileID: 705507995}
-  - {fileID: 1730590738}
   - {fileID: 1486580704}
   - {fileID: 2012127120}
   - {fileID: 1880351285}
