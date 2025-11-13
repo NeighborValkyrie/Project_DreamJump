@@ -1,19 +1,25 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 
 [RequireComponent(typeof(Collider))]
 public class AutoDoor_Double_Target : MonoBehaviour
 {
-    [Header("¹® Transform")]
-    public Transform leftDoor;          // ½ÇÁ¦ ¿ŞÂÊ ¹®           /*[º¯°æ°¡´É_¿ŞÂÊ¹®]*/
-    public Transform rightDoor;         // ½ÇÁ¦ ¿À¸¥ÂÊ ¹®         /*[º¯°æ°¡´É_¿À¸¥ÂÊ¹®]*/
+    [Header("ë¬¸ Transform")]
+    public Transform leftDoor;          // ì‹¤ì œ ì™¼ìª½ ë¬¸           /*[ë³€ê²½ê°€ëŠ¥_ì™¼ìª½ë¬¸]*/
+    public Transform rightDoor;         // ì‹¤ì œ ì˜¤ë¥¸ìª½ ë¬¸         /*[ë³€ê²½ê°€ëŠ¥_ì˜¤ë¥¸ìª½ë¬¸]*/
 
-    [Header("¿­·ÈÀ» ¶§ À§Ä¡(Target)")]
-    public Transform leftOpenTarget;    // ¿ŞÂÊ ¹®ÀÌ ¿ÏÀüÈ÷ ¿­·ÈÀ» ¶§ ÀÚ¸®  /*[º¯°æ°¡´É_¿ŞÂÊ¿­¸²Å¸°Ù]*/
-    public Transform rightOpenTarget;   // ¿À¸¥ÂÊ ¹®ÀÌ ¿ÏÀüÈ÷ ¿­·ÈÀ» ¶§ ÀÚ¸®/*[º¯°æ°¡´É_¿À¸¥ÂÊ¿­¸²Å¸°Ù]*/
+    [Header("ì—´ë ¸ì„ ë•Œ ìœ„ì¹˜(Target)")]
+    public Transform leftOpenTarget;    // ì™¼ìª½ ë¬¸ì´ ì™„ì „íˆ ì—´ë ¸ì„ ë•Œ ìë¦¬  /*[ë³€ê²½ê°€ëŠ¥_ì™¼ìª½ì—´ë¦¼íƒ€ê²Ÿ]*/
+    public Transform rightOpenTarget;   // ì˜¤ë¥¸ìª½ ë¬¸ì´ ì™„ì „íˆ ì—´ë ¸ì„ ë•Œ ìë¦¬/*[ë³€ê²½ê°€ëŠ¥_ì˜¤ë¥¸ìª½ì—´ë¦¼íƒ€ê²Ÿ]*/
 
-    [Header("µ¿ÀÛ ¼³Á¤")]
-    public float moveSpeed = 4f;        // ¿­¸®°í ´İÈ÷´Â ¼Óµµ           /*[º¯°æ°¡´É_¼Óµµ]*/
-    public string playerTag = "Player"; // ÇÃ·¹ÀÌ¾î ÅÂ±× ÀÌ¸§           /*[º¯°æ°¡´É_ÇÃ·¹ÀÌ¾îÅÂ±×]*/
+    [Header("ë™ì‘ ì„¤ì •")]
+    public float moveSpeed = 4f;        // ì—´ë¦¬ê³  ë‹«íˆëŠ” ì†ë„           /*[ë³€ê²½ê°€ëŠ¥_ì†ë„]*/
+    public string playerTag = "Player"; // í”Œë ˆì´ì–´ íƒœê·¸ ì´ë¦„           /*[ë³€ê²½ê°€ëŠ¥_í”Œë ˆì´ì–´íƒœê·¸]*/
+
+    [Header("ì˜¤ë””ì˜¤ ì„¤ì •")]
+    public AudioClip openDoorClip;      // ë¬¸ ì—´ë¦´ ë•Œ ì¬ìƒí•  ì‚¬ìš´ë“œ      /*[ë³€ê²½ê°€ëŠ¥_ë¬¸ì—´ë¦¼ì‚¬ìš´ë“œ]*/
+    public float openDoorVolume = 1f;   // ì‚¬ìš´ë“œ ë³¼ë¥¨                  /*[ë³€ê²½ê°€ëŠ¥_ë³¼ë¥¨]*/
+    public AudioSource audioSource;     // ì¬ìƒì— ì‚¬ìš©í•  AudioSource     /*[ë³€ê²½ê°€ëŠ¥_AudioSource]*/
+    public float minInterval = 0.3f;    // ì—°ì† ì¬ìƒ ë°©ì§€ ìµœì†Œ ê°„ê²©(ì´ˆ)  /*[ë³€ê²½ê°€ëŠ¥_ì¿¨íƒ€ì„]*/
 
     Vector3 _leftClosedLocal;
     Vector3 _rightClosedLocal;
@@ -21,6 +27,8 @@ public class AutoDoor_Double_Target : MonoBehaviour
     Vector3 _rightOpenLocal;
 
     bool _playerInRange = false;
+    bool _prevPlayerInRange = false;
+    float _lastOpenSoundTime = -999f;
 
     void Awake()
     {
@@ -29,17 +37,17 @@ public class AutoDoor_Double_Target : MonoBehaviour
 
         if (!leftDoor || !rightDoor || !leftOpenTarget || !rightOpenTarget)
         {
-            Debug.LogWarning("AutoDoor_Double_Target : ¹®/Å¸°Ù TransformÀ» ¸ğµÎ ÁöÁ¤ÇØ¾ß ÇÕ´Ï´Ù.");
+            Debug.LogWarning("AutoDoor_Double_Target : ë¬¸/íƒ€ê²Ÿ Transformì„ ëª¨ë‘ ì§€ì •í•´ì•¼ í•©ë‹ˆë‹¤.");
             enabled = false;
             return;
         }
 
-        // **Áß¿ä**: door¿Í targetÀº °°Àº ºÎ¸ğ ¾Æ·¡¿¡ µÎ´Â °É ±ÇÀå (localPosition ±âÁØ)
-        // ´İÈù À§Ä¡ = ½ÃÀÛ localPosition
+        // **ì¤‘ìš”**: doorì™€ targetì€ ê°™ì€ ë¶€ëª¨ ì•„ë˜ì— ë‘ëŠ” ê±¸ ê¶Œì¥ (localPosition ê¸°ì¤€)
+        // ë‹«íŒ ìœ„ì¹˜ = ì‹œì‘ localPosition
         _leftClosedLocal = leftDoor.localPosition;
         _rightClosedLocal = rightDoor.localPosition;
 
-        // ¿­¸° À§Ä¡ = Å¸°ÙÀÇ localPosition
+        // ì—´ë¦° ìœ„ì¹˜ = íƒ€ê²Ÿì˜ localPosition
         _leftOpenLocal = leftOpenTarget.localPosition;
         _rightOpenLocal = rightOpenTarget.localPosition;
     }
@@ -62,6 +70,13 @@ public class AutoDoor_Double_Target : MonoBehaviour
 
     void Update()
     {
+        // ğŸ‘‰ ìƒíƒœ ë³€í™” ì²´í¬: ë‹«í˜(false) â†’ ì—´ë¦¼(true)ë¡œ ë°”ë€ŒëŠ” ê·¸ í”„ë ˆì„
+        if (!_prevPlayerInRange && _playerInRange)
+        {
+            TryPlayOpenSound();
+        }
+        _prevPlayerInRange = _playerInRange;
+
         Vector3 targetL = _playerInRange ? _leftOpenLocal : _leftClosedLocal;
         Vector3 targetR = _playerInRange ? _rightOpenLocal : _rightClosedLocal;
 
@@ -69,5 +84,26 @@ public class AutoDoor_Double_Target : MonoBehaviour
 
         leftDoor.localPosition = Vector3.Lerp(leftDoor.localPosition, targetL, t);
         rightDoor.localPosition = Vector3.Lerp(rightDoor.localPosition, targetR, t);
+    }
+
+    void TryPlayOpenSound()
+    {
+        if (!openDoorClip) return;
+
+        // ì—°ì† ì¬ìƒ ë°©ì§€ ì¿¨íƒ€ì„ ì²´í¬
+        if (Time.time - _lastOpenSoundTime < minInterval) return;
+
+        // AudioSourceê°€ ì—°ê²°ë˜ì–´ ìˆìœ¼ë©´ ê·¸ê±¸ ì‚¬ìš©
+        if (audioSource)
+        {
+            audioSource.PlayOneShot(openDoorClip, openDoorVolume);
+        }
+        else
+        {
+            // ì—†ìœ¼ë©´ ì´ ì˜¤ë¸Œì íŠ¸ ìœ„ì¹˜ì—ì„œ 3D ì¬ìƒ
+            AudioSource.PlayClipAtPoint(openDoorClip, transform.position, openDoorVolume);
+        }
+
+        _lastOpenSoundTime = Time.time;
     }
 }

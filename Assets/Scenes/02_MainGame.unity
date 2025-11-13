@@ -4677,6 +4677,10 @@ MonoBehaviour:
   rightOpenTarget: {fileID: 995203916}
   moveSpeed: 0.3
   playerTag: Player
+  openDoorClip: {fileID: 8300000, guid: 3bbdcd1edad57a748a6f31b7d1a1d934, type: 3}
+  openDoorVolume: 1
+  audioSource: {fileID: 0}
+  minInterval: 1
 --- !u!65 &125795969
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -8128,6 +8132,9 @@ MonoBehaviour:
   playerTag: Player
   respawnDelay: 0.2
   hitEffect: {fileID: 0}
+  hitVoiceClip: {fileID: 0}
+  hitVoiceVolume: 1
+  audioSource: {fileID: 0}
 --- !u!65 &247334305
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -34192,6 +34199,9 @@ MonoBehaviour:
   playerTag: Player
   respawnDelay: 0.2
   hitEffect: {fileID: 0}
+  hitVoiceClip: {fileID: 8300000, guid: 985dfc8451b79cc41a6b429cfb5d7fe4, type: 3}
+  hitVoiceVolume: 1
+  audioSource: {fileID: 0}
 --- !u!65 &959998186
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -37049,6 +37059,10 @@ MonoBehaviour:
   rightOpenTarget: {fileID: 0}
   moveSpeed: 3
   playerTag: Player
+  openDoorClip: {fileID: 0}
+  openDoorVolume: 1
+  audioSource: {fileID: 0}
+  minInterval: 0.3
 --- !u!65 &1029656488
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -56394,6 +56408,9 @@ MonoBehaviour:
   playerTag: Player
   respawnDelay: 0.2
   hitEffect: {fileID: 0}
+  hitVoiceClip: {fileID: 8300000, guid: 985dfc8451b79cc41a6b429cfb5d7fe4, type: 3}
+  hitVoiceVolume: 1
+  audioSource: {fileID: 0}
 --- !u!64 &1554857702
 MeshCollider:
   m_ObjectHideFlags: 0
