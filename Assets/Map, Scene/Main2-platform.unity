@@ -25171,7 +25171,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   layerMask:
     serializedVersion: 2
-    m_Bits: 1
+    m_Bits: 129
   steepSlopeThresholdDegrees: 56
   padding: 0.1
   overhangTolerance: 0.15
