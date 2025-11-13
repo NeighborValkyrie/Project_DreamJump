@@ -10463,7 +10463,7 @@ MonoBehaviour:
   breakTrigger: 1
   breakAfter: 1.2
   shatterVFX: {fileID: 0}
-  breakSFX: {fileID: 0}
+  breakSFX: {fileID: 8300000, guid: cf0a8c87991e3874ea00810ad567c32d, type: 3}
   destroyObject: 0
   disableDelay: 0
   solidCollider: {fileID: 102746550}
@@ -12263,7 +12263,7 @@ MonoBehaviour:
   breakTrigger: 1
   breakAfter: 1.2
   shatterVFX: {fileID: 0}
-  breakSFX: {fileID: 0}
+  breakSFX: {fileID: 8300000, guid: cf0a8c87991e3874ea00810ad567c32d, type: 3}
   destroyObject: 0
   disableDelay: 0
   solidCollider: {fileID: 660091799}
@@ -16158,7 +16158,7 @@ MonoBehaviour:
   breakTrigger: 1
   breakAfter: 1.2
   shatterVFX: {fileID: 0}
-  breakSFX: {fileID: 0}
+  breakSFX: {fileID: 8300000, guid: cf0a8c87991e3874ea00810ad567c32d, type: 3}
   destroyObject: 0
   disableDelay: 0
   solidCollider: {fileID: 1957191123}
@@ -41459,7 +41459,7 @@ MonoBehaviour:
   breakTrigger: 1
   breakAfter: 1.2
   shatterVFX: {fileID: 0}
-  breakSFX: {fileID: 0}
+  breakSFX: {fileID: 8300000, guid: cf0a8c87991e3874ea00810ad567c32d, type: 3}
   destroyObject: 0
   disableDelay: 0
   solidCollider: {fileID: 756812174}
@@ -52571,7 +52571,7 @@ MonoBehaviour:
   breakTrigger: 1
   breakAfter: 1.2
   shatterVFX: {fileID: 0}
-  breakSFX: {fileID: 0}
+  breakSFX: {fileID: 8300000, guid: cf0a8c87991e3874ea00810ad567c32d, type: 3}
   destroyObject: 0
   disableDelay: 0
   solidCollider: {fileID: 1586042974}
@@ -75515,7 +75515,7 @@ MonoBehaviour:
   breakTrigger: 1
   breakAfter: 1.2
   shatterVFX: {fileID: 0}
-  breakSFX: {fileID: 0}
+  breakSFX: {fileID: 8300000, guid: cf0a8c87991e3874ea00810ad567c32d, type: 3}
   destroyObject: 0
   disableDelay: 0
   solidCollider: {fileID: 1715270024}
