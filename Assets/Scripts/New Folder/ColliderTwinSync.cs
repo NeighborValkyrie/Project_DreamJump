@@ -133,7 +133,7 @@ public class ColliderTwinSync : MonoBehaviour
         {
             dstM.sharedMesh = srcM.sharedMesh;
             dstM.convex = meshTriggerConvex;
-            dstM.inflateMesh = srcM.inflateMesh;
+            
             dstM.cookingOptions = srcM.cookingOptions;
             // isTrigger는 위에서 이미 true로 설정
         }

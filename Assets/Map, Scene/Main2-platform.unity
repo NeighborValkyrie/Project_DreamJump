@@ -18040,7 +18040,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f4d22333321f2dd4580dbbcfb249f1e0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  target: {fileID: 985096076}
+  target: {fileID: 0}
   blendShapeIndex: 0
   maxBlendShapeValue: 100
   animationSpeed: 1
@@ -22069,7 +22069,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f4d22333321f2dd4580dbbcfb249f1e0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  target: {fileID: 985096076}
+  target: {fileID: 0}
   blendShapeIndex: 0
   maxBlendShapeValue: 100
   animationSpeed: 1
@@ -22426,11 +22426,6 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 0}
---- !u!137 &985096076 stripped
-SkinnedMeshRenderer:
-  m_CorrespondingSourceObject: {fileID: 5472574702312498535, guid: ef12657401d83094a87bae5686c82992, type: 3}
-  m_PrefabInstance: {fileID: 1448114775}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &987347654
 GameObject:
   m_ObjectHideFlags: 0
@@ -25176,7 +25171,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   layerMask:
     serializedVersion: 2
-    m_Bits: 129
+    m_Bits: 1
   steepSlopeThresholdDegrees: 56
   padding: 0.1
   overhangTolerance: 0.15
@@ -26657,7 +26652,7 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 0
     m_RotationOrder: 4
-  playIdleAnimation: 0
+  playIdleAnimation: 1
   idleMaxValue: 20
   idleSpeed: 0.5
   idleDelay: 0.1
@@ -28854,7 +28849,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f4d22333321f2dd4580dbbcfb249f1e0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  target: {fileID: 985096076}
+  target: {fileID: 0}
   blendShapeIndex: 0
   maxBlendShapeValue: 100
   animationSpeed: 1
@@ -37262,7 +37257,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f4d22333321f2dd4580dbbcfb249f1e0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  target: {fileID: 985096076}
+  target: {fileID: 0}
   blendShapeIndex: 0
   maxBlendShapeValue: 100
   animationSpeed: 1
@@ -48337,7 +48332,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f4d22333321f2dd4580dbbcfb249f1e0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  target: {fileID: 985096076}
+  target: {fileID: 0}
   blendShapeIndex: 0
   maxBlendShapeValue: 100
   animationSpeed: 1
