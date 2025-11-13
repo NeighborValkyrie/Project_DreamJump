@@ -466,7 +466,7 @@ MonoBehaviour:
   quitButton: {fileID: 1345383099661878203}
   settingsPanel: {fileID: 3976670701588072282}
   controlsPanel: {fileID: 6843874059251327592}
-  firstLevelScene: 02_MainGame
+  firstLevelScene: Movie
 --- !u!1 &705507993
 GameObject:
   m_ObjectHideFlags: 0
