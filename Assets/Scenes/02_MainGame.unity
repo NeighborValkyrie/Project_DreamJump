@@ -936,9 +936,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1772ac2f5de69e4418b9130dae7f6283, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  pauseUI: {fileID: 897079977}
+  pauseUI: {fileID: 0}
   player: {fileID: 0}
-  mainMenuSceneName: MainMenu
+  mainMenuSceneName: 01_TitleScene
   lockCursorWhenPlaying: 1
   playLockMode: 1
 --- !u!4 &19375360
@@ -35303,7 +35303,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &987347655
 RectTransform:
   m_ObjectHideFlags: 0
@@ -47723,7 +47723,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1347932269
 RectTransform:
   m_ObjectHideFlags: 0
