@@ -1,28 +1,28 @@
-// Checkpoint.cs (¾÷µ¥ÀÌÆ® ¹öÀü)
+// Checkpoint.cs (ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ® ï¿½ï¿½ï¿½ï¿½)
 using UnityEngine;
 
 [RequireComponent(typeof(Collider))]
 public class Checkpoint : MonoBehaviour
 {
     [Header("Respawn Point")]
-    [Tooltip("¸®½ºÆù À§Ä¡/È¸Àü. ºñ¿ì¸é ÀÚ±â Transform »ç¿ë")]
+    [Tooltip("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ä¡/È¸ï¿½ï¿½. ï¿½ï¿½ï¿½ï¿½ ï¿½Ú±ï¿½ Transform ï¿½ï¿½ï¿½")]
     public Transform spawnPoint;
 
     [Header("Activation FX")]
-    public ParticleSystem vfxPrefab;  // ¼±ÅÃ: ÆÄÆ¼Å¬ ÇÁ¸®ÆÕ
-    public AudioClip sfx;             // ¼±ÅÃ: »ç¿îµå Å¬¸³
+    public ParticleSystem vfxPrefab;  // ï¿½ï¿½ï¿½ï¿½: ï¿½ï¿½Æ¼Å¬ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+    public AudioClip sfx;             // ï¿½ï¿½ï¿½ï¿½: ï¿½ï¿½ï¿½ï¿½ Å¬ï¿½ï¿½
     [Range(0f, 1f)] public float sfxVolume = 1f;
 
     [Header("Popup UI")]
     public bool showPopup = true;
-    public string popupMessage = "Ã¼Å©Æ÷ÀÎÆ®!";
+    public string popupMessage = "Ã¼Å©ï¿½ï¿½ï¿½ï¿½Æ®!";
 
-    [Header("Marker (¼±ÅÃ: È°¼ºÈ­ ½Ã °¨Ãß±â)")]
+    [Header("Marker (ï¿½ï¿½ï¿½ï¿½: È°ï¿½ï¿½È­ ï¿½ï¿½ ï¿½ï¿½ï¿½ß±ï¿½)")]
     public GameObject markerToHide;
     public bool hideMarkerOnActivate = true;
 
     [Header("Behavior")]
-    public bool onlyOnce = true;      // ÇÑ ¹ø ÂïÀ¸¸é ´Ù½Ã ¾È ¶ß°Ô
+    public bool onlyOnce = true;      // ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ù½ï¿½ ï¿½ï¿½ ï¿½ß°ï¿½
 
     bool activated;
 
@@ -32,19 +32,19 @@ public class Checkpoint : MonoBehaviour
         col.isTrigger = true;
         if (!spawnPoint) spawnPoint = transform;
 
-        // ½ÃÀÛ ½Ã ¸¶Ä¿´Â º¸ÀÌµµ·Ï
+        // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½Ä¿ï¿½ï¿½ ï¿½ï¿½ï¿½Ìµï¿½ï¿½ï¿½
         if (markerToHide) markerToHide.SetActive(true);
         activated = false;
     }
 
     void OnTriggerEnter(Collider other)
     {
-        // ÀÚ½Ä ÄÝ¶óÀÌ´õ ´ëÀÀ: ·çÆ®·Î ¿Ã¶ó°¡ Player ÅÂ±× È®ÀÎ
+        // ï¿½Ú½ï¿½ ï¿½Ý¶ï¿½ï¿½Ì´ï¿½ ï¿½ï¿½ï¿½ï¿½: ï¿½ï¿½Æ®ï¿½ï¿½ ï¿½Ã¶ï¿½ Player ï¿½Â±ï¿½ È®ï¿½ï¿½
         var root = other.attachedRigidbody ? other.attachedRigidbody.gameObject : other.gameObject;
         if (!root.CompareTag("Player")) return;
         if (onlyOnce && activated) return;
 
-        // Ã¼Å©Æ÷ÀÎÆ® µî·Ï
+        // Ã¼Å©ï¿½ï¿½ï¿½ï¿½Æ® ï¿½ï¿½ï¿½
         if (RespawnManager.Instance) RespawnManager.Instance.SetCheckpoint(spawnPoint);
 
         // FX
@@ -54,7 +54,7 @@ public class Checkpoint : MonoBehaviour
         // UI
         if (showPopup) CheckpointPopupUI.Show(popupMessage);
 
-        // ¸¶Ä¿ ¼û±è
+        // ï¿½ï¿½Ä¿ ï¿½ï¿½ï¿½ï¿½
         if (hideMarkerOnActivate && markerToHide) markerToHide.SetActive(false);
 
         activated = true;
