@@ -18,7 +18,6 @@ namespace PlatformerGame.Systems.Audio
         [Header("Background Music")]
         [SerializeField] private AudioClip titleBGM;
         [SerializeField] private AudioClip gameBGM;
-        [SerializeField] private AudioClip storyBGM;
 
         [Header("Volume Settings")]
         [SerializeField, Range(0f, 1f)] private float bgmVolume = 0.7f;
@@ -108,9 +107,6 @@ namespace PlatformerGame.Systems.Audio
                     break;
                 case "02_MainGame":
                     clipToPlay = gameBGM;
-                    break;
-                case "03_StoryScene":
-                    clipToPlay = storyBGM;
                     break;
                 default:
                     Debug.LogWarning($"[AudioManager] '{sceneName}' 씬에 대한 BGM이 설정되지 않았습니다.");

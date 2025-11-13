@@ -31,7 +31,7 @@ public class SettingsController : MonoBehaviour
     {
         // PlayerPrefs에서 설정 불러오기
         float volume = PlayerPrefs.GetFloat(VolumeKey, 0.75f);
-        float sensitivity = PlayerPrefs.GetFloat(SensitivityKey, 1.0f);
+        float sensitivity = PlayerPrefs.GetFloat(SensitivityKey, 5.0f);
         
         // 슬라이더 값 설정
         if (volumeSlider != null) volumeSlider.value = volume;
@@ -75,7 +75,7 @@ public class SettingsController : MonoBehaviour
     {
         if (volumeText != null)
         {
-            volumeText.text = $"볼륨: {Mathf.Round(value * 100)}%";
+            volumeText.text = $"볼륨: {Mathf.Round(value * 10)}%";
         }
     }
     
