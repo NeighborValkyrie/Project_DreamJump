@@ -9,7 +9,7 @@ public class BoatDisembark : MonoBehaviour
 
     [Header("설정")]
     public KeyCode interactKey = KeyCode.E;   // /*[변경가능_키]*/
-    public float arrivalRadius = 0.15f;       // /*[변경가능_거리]*/
+    public float arrivalRadius = 1f;       // /*[변경가능_거리]*/
 
     [Header("UI")]
     public GameObject promptUI;  // "E 눌러 하선하기" 텍스트나 패널  /*[변경가능_UI객체]*/
