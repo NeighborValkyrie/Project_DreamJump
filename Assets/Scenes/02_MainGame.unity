@@ -21505,8 +21505,8 @@ MonoBehaviour:
   titleButton: {fileID: 6932227406496781285}
   settingsButton: {fileID: 588858498581551865}
   quitButton: {fileID: 2838565458637729990}
-  settingsPanel: {fileID: 0}
-  titleSceneName: Title
+  settingsPanel: {fileID: 7817037797905690080}
+  titleSceneName: 01_TitleScene
   currentSceneName: 
 --- !u!4 &618739285
 Transform:
@@ -67539,7 +67539,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &1892687097
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -80520,7 +80520,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: -70}
+  m_AnchoredPosition: {x: 61, y: -70}
   m_SizeDelta: {x: 500, y: 556}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &7199207868597478177
@@ -80901,7 +80901,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &7838196178111774856
 MonoBehaviour:
   m_ObjectHideFlags: 0
