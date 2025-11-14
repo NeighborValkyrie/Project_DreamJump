@@ -1,34 +1,34 @@
-ï»¿using UnityEngine;
+using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class EndingPoint : MonoBehaviour
 {
-    [Header("ì”¬ ì´ë¦„ ì„¤ì •")]
-    public string endingSceneName = "EndingScene";   /*[ë³€ê²½ê°€ëŠ¥_ì—”ë”©ì”¬ì´ë¦„]*/
-    public string mainTitleSceneName = "MainTitle";  /*[ë³€ê²½ê°€ëŠ¥_ë©”ì¸íƒ€ì´í‹€ì”¬ì´ë¦„]*/
+    [Header("¾À ÀÌ¸§ ¼³Á¤")]
+    public string endingSceneName = "EndingScene";   /*[º¯°æ°¡´É_¿£µù¾ÀÀÌ¸§]*/
+    public string mainTitleSceneName = "MainTitle";  /*[º¯°æ°¡´É_¸ŞÀÎÅ¸ÀÌÆ²¾ÀÀÌ¸§]*/
 
-    [Header("ì—”ë”©ì”¬ ì¬ìƒ ì‹œê°„(ì´ˆ)")]
-    public float endingDuration = 10f;               /*[ë³€ê²½ê°€ëŠ¥_ì—”ë”©ê¸¸ì´ì´ˆ]*/
+    [Header("¿£µù¾À Àç»ı ½Ã°£(ÃÊ)")]
+    public float endingDuration = 10f;               /*[º¯°æ°¡´É_¿£µù±æÀÌÃÊ]*/
 
     bool _triggered = false;
 
     void Awake()
     {
-        // ì´ ì˜¤ë¸Œì íŠ¸ëŠ” ì”¬ì´ ë°”ë€Œì–´ë„ ìœ ì§€ë˜ê²Œ í•¨
+        // ÀÌ ¿ÀºêÁ§Æ®´Â ¾ÀÀÌ ¹Ù²î¾îµµ À¯ÁöµÇ°Ô ÇÔ
         DontDestroyOnLoad(gameObject);
     }
 
     void OnTriggerEnter(Collider other)
     {
-        // ì´ë¯¸ í•œ ë²ˆ íŠ¸ë¦¬ê±° ëìœ¼ë©´ ë¬´ì‹œ
+        // ÀÌ¹Ì ÇÑ ¹ø Æ®¸®°Å µÆÀ¸¸é ¹«½Ã
         if (_triggered) return;
 
-        // Player íƒœê·¸ì—ë§Œ ë°˜ì‘
-        if (!other.CompareTag("Player")) return;      /*[ë³€ê²½ê°€ëŠ¥_íƒœê·¸ì´ë¦„]*/
+        // Player ÅÂ±×¿¡¸¸ ¹İÀÀ
+        if (!other.CompareTag("Player")) return;      /*[º¯°æ°¡´É_ÅÂ±×ÀÌ¸§]*/
 
         _triggered = true;
 
-        // ë‹¤ì‹œ ë‹¿ì§€ ì•Šë„ë¡ ì½œë¼ì´ë” ë¹„í™œì„±í™”
+        // ´Ù½Ã ´êÁö ¾Êµµ·Ï Äİ¶óÀÌ´õ ºñÈ°¼ºÈ­
         var col = GetComponent<Collider>();
         if (col) col.enabled = false;
 
@@ -37,22 +37,18 @@ public class EndingPoint : MonoBehaviour
 
     System.Collections.IEnumerator PlayEndingRoutine()
     {
-        // 1) ì—”ë”© ì”¬ ë¡œë“œ
-        Debug.Log("EndingPoint: ì—”ë”©ì”¬ ë¡œë“œ â†’ " + endingSceneName);
+        // 1) ¿£µù ¾À ·Îµå
+        Debug.Log("EndingPoint: ¿£µù¾À ·Îµå ¡æ " + endingSceneName);
         SceneManager.LoadScene(endingSceneName, LoadSceneMode.Single);
 
-        // 2) ì—”ë”©ì”¬ ì¬ìƒ ì‹œê°„ë§Œí¼ ëŒ€ê¸°
+        // 2) ¿£µù¾À Àç»ı ½Ã°£¸¸Å­ ´ë±â
         yield return new WaitForSeconds(endingDuration);
 
-        // 3) ë©”ì¸ íƒ€ì´í‹€ ì”¬ ë¡œë“œ
-        Debug.Log("EndingPoint: ë©”ì¸ íƒ€ì´í‹€ ë¡œë“œ â†’ " + mainTitleSceneName);
+        // 3) ¸ŞÀÎ Å¸ÀÌÆ² ¾À ·Îµå
+        Debug.Log("EndingPoint: ¸ŞÀÎ Å¸ÀÌÆ² ·Îµå ¡æ " + mainTitleSceneName);
         SceneManager.LoadScene(mainTitleSceneName, LoadSceneMode.Single);
 
-        // ğŸ”¹ 3-1) ë©”ì¸ íƒ€ì´í‹€ ì§„ì… ì‹œ ë§ˆìš°ìŠ¤ ì»¤ì„œ ë‹¤ì‹œ ë³´ì´ê²Œ & ì ê¸ˆ í•´ì œ
-        Cursor.visible = true;
-        Cursor.lockState = CursorLockMode.None;
-
-        // 4) ë” ì´ìƒ í•„ìš” ì—†ìœ¼ë‹ˆ ìê¸° ìì‹  ì‚­ì œ
+        // 4) ´õ ÀÌ»ó ÇÊ¿ä ¾øÀ¸´Ï ÀÚ±â ÀÚ½Å »èÁ¦
         Destroy(gameObject);
     }
 }
