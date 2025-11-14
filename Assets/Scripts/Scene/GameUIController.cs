@@ -93,7 +93,8 @@ public class GameUIController : MonoBehaviour
         isPaused = false;
         if (pauseMenuPanel != null) pauseMenuPanel.SetActive(false);
         Time.timeScale = 1f;
-        
+        Cursor.lockState = CursorLockMode.Locked; /*[변경가능_플레이중_커서상태]*/
+        Cursor.visible = false;                   /*[변경가능_플레이중_커서표시]*/
         OnPlayerRespawnRequested?.Invoke();
     }
     
@@ -109,20 +110,26 @@ public class GameUIController : MonoBehaviour
     
     public void OpenSettings()
     {
+        // 게임 메뉴(일시정지 패널)는 끄고
+        if (pauseMenuPanel != null)
+            pauseMenuPanel.SetActive(false);
+
+        // 설정 패널만 켜기
         if (settingsPanel != null)
-        {
             settingsPanel.SetActive(true);
-        }
     }
-    
+
     public void CloseSettings()
     {
+        // 설정 패널 끄고
         if (settingsPanel != null)
-        {
             settingsPanel.SetActive(false);
-        }
+
+        // 일시정지 메뉴 다시 보이게
+        if (pauseMenuPanel != null)
+            pauseMenuPanel.SetActive(true);
     }
-    
+
     public void QuitGame()
     {
         #if UNITY_EDITOR

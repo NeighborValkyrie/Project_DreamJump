@@ -14838,9 +14838,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c7ee17d3ed2f2ba47a5aa763882b6981, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  pauseMenuPanel: {fileID: 1989297986}
+  pauseMenuPanel: {fileID: 5193359086752880620}
   resumeButton: {fileID: 8112251784363921063}
-  restartButton: {fileID: 0}
+  restartButton: {fileID: 1938743625}
   titleButton: {fileID: 6932227406496781285}
   settingsButton: {fileID: 588858498581551865}
   quitButton: {fileID: 2838565458637729990}
@@ -21481,7 +21481,7 @@ GameObject:
   - component: {fileID: 618739285}
   - component: {fileID: 618739284}
   m_Layer: 0
-  m_Name: GameObject (1)
+  m_Name: Pause manager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -21516,12 +21516,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 618739283}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 1477450729}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &632445664
 GameObject:
@@ -32657,6 +32657,7 @@ GameObject:
   - component: {fileID: 953013749}
   - component: {fileID: 953013751}
   - component: {fileID: 953013750}
+  - component: {fileID: 953013752}
   m_Layer: 6
   m_Name: View
   m_TagString: Untagged
@@ -32714,6 +32715,22 @@ MonoBehaviour:
   pointerInputMultiplier: {x: 0.15, y: 0.12}
   joystickInputMultiplier: {x: 250, y: 200}
   smoothTime: 0.03
+  sensitivityKey: MouseSensitivity
+  basePointerX: 0.15
+  basePointerY: 0.12
+--- !u!114 &953013752
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 953013748}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5d194033cf41ba14fa77bf897186cf34, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  viewControl: {fileID: 953013751}
 --- !u!1001 &955871654
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -51810,6 +51827,9 @@ Transform:
   - {fileID: 1941654994}
   - {fileID: 438145940}
   - {fileID: 1927612690}
+  - {fileID: 618739285}
+  - {fileID: 1669609245}
+  - {fileID: 1752839796}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1482581632 stripped
@@ -59905,12 +59925,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1669609243}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 1477450729}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1670339913 stripped
 GameObject:
@@ -62933,12 +62953,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1752839794}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 74.2, y: 3.39, z: -316.6}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 1477450729}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1758743583
 PrefabInstance:
@@ -67534,7 +67554,7 @@ GameObject:
   - component: {fileID: 1892687098}
   - component: {fileID: 1892687097}
   m_Layer: 5
-  m_Name: Canvas
+  m_Name: setting (Canvas)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -69101,7 +69121,7 @@ GameObject:
   - component: {fileID: 1927612690}
   - component: {fileID: 1927612691}
   m_Layer: 0
-  m_Name: Setting
+  m_Name: SettingsController
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -71543,7 +71563,7 @@ GameObject:
   - component: {fileID: 1989297988}
   - component: {fileID: 1989297987}
   m_Layer: 5
-  m_Name: Canvas
+  m_Name: Pause(Canvas)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -78444,7 +78464,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 4608120127897626257}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 438145941}
+        m_TargetAssemblyTypeName: GameUIController, Assembly-CSharp
+        m_MethodName: CloseSettings
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!222 &2427308630743756157
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -79728,7 +79760,7 @@ MonoBehaviour:
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
   m_DynamicPixelsPerUnit: 1
-  m_PresetInfoIsWorld: 1
+  m_PresetInfoIsWorld: 0
 --- !u!114 &5558688362281962123
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -81445,6 +81477,7 @@ SceneRoots:
   - {fileID: 1409463936}
   - {fileID: 415852725}
   - {fileID: 921666867}
+  - {fileID: 1892687100}
   - {fileID: 1989297990}
   - {fileID: 1477450729}
   - {fileID: 409746171}
@@ -81465,7 +81498,3 @@ SceneRoots:
   - {fileID: 143552945}
   - {fileID: 1261224979}
   - {fileID: 1652937183}
-  - {fileID: 1752839796}
-  - {fileID: 1669609245}
-  - {fileID: 618739285}
-  - {fileID: 1892687100}
