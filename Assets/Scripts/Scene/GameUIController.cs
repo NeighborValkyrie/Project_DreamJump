@@ -67,6 +67,16 @@ public class GameUIController : MonoBehaviour
         }
         
         Time.timeScale = isPaused ? 0f : 1f;
+        if (isPaused)
+        {
+            Cursor.lockState = CursorLockMode.None;   /*[변경가능_일시정즘_커서상태]*/
+            Cursor.visible = true;                    /*[변경가능_일시정지_커서표시]*/
+        }
+        else
+        {
+            Cursor.lockState = CursorLockMode.Locked; /*[변경가능_플레이중_커서상태]*/
+            Cursor.visible = false;                   /*[변경가능_플레이중_커서표시]*/
+        }
     }
     
     public void ResumeGame()
@@ -74,6 +84,8 @@ public class GameUIController : MonoBehaviour
         isPaused = false;
         if (pauseMenuPanel != null) pauseMenuPanel.SetActive(false);
         Time.timeScale = 1f;
+        Cursor.lockState = CursorLockMode.Locked; /*[변경가능_플레이중_커서상태]*/
+        Cursor.visible = false;                   /*[변경가능_플레이중_커서표시]*/
     }
     
     public void RestartGame()
