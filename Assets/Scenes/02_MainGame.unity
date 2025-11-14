@@ -19211,7 +19211,7 @@ MonoBehaviour:
   axis: {x: 0, y: 1, z: 0}
   worldSpaceAxis: 1
   mode: 0
-  degreesPerSecond: 45
+  degreesPerSecond: 20
   minAngle: -45
   maxAngle: 45
   startAngle: 0
@@ -57503,7 +57503,7 @@ MonoBehaviour:
   axis: {x: 0, y: 1, z: 0}
   worldSpaceAxis: 1
   mode: 0
-  degreesPerSecond: 45
+  degreesPerSecond: 20
   minAngle: -45
   maxAngle: 45
   startAngle: 0
@@ -62471,7 +62471,7 @@ MonoBehaviour:
   axis: {x: 0, y: 1, z: 0}
   worldSpaceAxis: 1
   mode: 0
-  degreesPerSecond: 45
+  degreesPerSecond: 20
   minAngle: -45
   maxAngle: 45
   startAngle: 0
@@ -66328,7 +66328,7 @@ MonoBehaviour:
   axis: {x: 0, y: 1, z: 0}
   worldSpaceAxis: 1
   mode: 0
-  degreesPerSecond: 90
+  degreesPerSecond: 20
   minAngle: -45
   maxAngle: 45
   startAngle: 0
@@ -66912,7 +66912,7 @@ MonoBehaviour:
   axis: {x: 0, y: 1, z: 0}
   worldSpaceAxis: 1
   mode: 0
-  degreesPerSecond: 45
+  degreesPerSecond: 20
   minAngle: -45
   maxAngle: 45
   startAngle: 0
@@ -70448,7 +70448,7 @@ MonoBehaviour:
   axis: {x: 0, y: 1, z: 0}
   worldSpaceAxis: 1
   mode: 0
-  degreesPerSecond: 45
+  degreesPerSecond: 20
   minAngle: -45
   maxAngle: 45
   startAngle: 0
