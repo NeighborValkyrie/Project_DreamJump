@@ -12,7 +12,7 @@ EditorBuildSettings:
     path: Assets/Scenes/Movie.unity
     guid: db54e4f131cfd134c9524c4a6aee5f5e
   - enabled: 1
-    path: Assets/Scenes/02_MainGame.unity
+    path: Assets/Scenes/02_MainGame_UI.unity
     guid: b4b0291d1f888684191372ee862aa306
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 61a1ed41c83c0f84ea69378a7c67a3b3, type: 3}
