@@ -14,6 +14,10 @@ public class EnemyHitRespawn : MonoBehaviour
     public float hitVoiceVolume = 1f;                /*[변경가능_피격음성볼륨]*/
     public AudioSource audioSource;                  /*[변경가능_재생에쓸오디오소스]*/
 
+    [Header("Coin Penalty")]
+    public bool useCoinPenalty = true;               /*[변경가능_코인패널티사용]*/
+    public int coinPenalty = 5;                      /*[변경가능_피격시차감코인수]*/
+
     void OnTriggerEnter(Collider other)
     {
         if (!other.CompareTag(playerTag)) return;
@@ -48,8 +52,22 @@ public class EnemyHitRespawn : MonoBehaviour
         if (hitEffect)
             Instantiate(hitEffect, player.transform.position, Quaternion.identity);
 
-        // 5️⃣ 리스폰 코루틴 실행
+        // 5️⃣ 코인 패널티 적용 (있으면)
+        ApplyCoinPenalty();
+
+        // 6️⃣ 리스폰 코루틴 실행
         StartCoroutine(CoRespawn(player));
+    }
+
+    void ApplyCoinPenalty()
+    {
+        if (!useCoinPenalty) return;
+        if (!CollectibleManager.Instance) return;
+        if (coinPenalty <= 0) return;
+
+        // CollectibleManager는 음수 delta 허용 + 0이하 클램프하도록 수정된 상태여야 함
+        // AddCoin(-5) → 현재 코인에서 5만큼 감소 (최소 0)
+        CollectibleManager.Instance.AddCoin(-coinPenalty);
     }
 
     void PlayHitVoice(Vector3 position)

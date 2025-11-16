@@ -5,6 +5,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: -8679921383154817045, guid: 259be7cdd2d12204fa93af9008f87c0b, type: 3}
@@ -51,11 +52,48 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -3887185075125053422, guid: 259be7cdd2d12204fa93af9008f87c0b, type: 3}
+      propertyPath: m_DirtyAABB
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -3887185075125053422, guid: 259be7cdd2d12204fa93af9008f87c0b, type: 3}
+      propertyPath: m_AABB.m_Center.x
+      value: 0.037937164
+      objectReference: {fileID: 0}
+    - target: {fileID: -3887185075125053422, guid: 259be7cdd2d12204fa93af9008f87c0b, type: 3}
+      propertyPath: m_AABB.m_Center.y
+      value: 12.125924
+      objectReference: {fileID: 0}
+    - target: {fileID: -3887185075125053422, guid: 259be7cdd2d12204fa93af9008f87c0b, type: 3}
+      propertyPath: m_AABB.m_Center.z
+      value: -0.0003862381
+      objectReference: {fileID: 0}
+    - target: {fileID: -3887185075125053422, guid: 259be7cdd2d12204fa93af9008f87c0b, type: 3}
+      propertyPath: m_AABB.m_Extent.x
+      value: 16.939207
+      objectReference: {fileID: 0}
+    - target: {fileID: -3887185075125053422, guid: 259be7cdd2d12204fa93af9008f87c0b, type: 3}
+      propertyPath: m_AABB.m_Extent.y
+      value: 12.12592
+      objectReference: {fileID: 0}
+    - target: {fileID: -3887185075125053422, guid: 259be7cdd2d12204fa93af9008f87c0b, type: 3}
+      propertyPath: m_AABB.m_Extent.z
+      value: 16.903103
+      objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 259be7cdd2d12204fa93af9008f87c0b, type: 3}
       propertyPath: m_Name
       value: Mountain_02
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 259be7cdd2d12204fa93af9008f87c0b, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 3942806132752447276}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 259be7cdd2d12204fa93af9008f87c0b, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: -2329653691091575546}
   m_SourcePrefab: {fileID: 100100000, guid: 259be7cdd2d12204fa93af9008f87c0b, type: 3}
 --- !u!1 &1672283346439010167 stripped
 GameObject:
@@ -70,9 +108,17 @@ MeshCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1672283346439010167}
   m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
   m_IsTrigger: 0
+  m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 4
+  serializedVersion: 5
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 1073056596807412527, guid: 259be7cdd2d12204fa93af9008f87c0b, type: 3}
@@ -88,6 +134,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f4d22333321f2dd4580dbbcfb249f1e0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  target: {fileID: 0}
   blendShapeIndex: 0
   maxBlendShapeValue: 80
   animationSpeed: 0.1
@@ -115,6 +162,9 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  useFixedDelay: 0
-  fixedDelay: 0
-  delayBetweenCycles: 0
+  playIdleAnimation: 1
+  idleMaxValue: 20
+  idleSpeed: 0.5
+  idleDelay: 0.1
+  autoDisableIfMissing: 1
+  warnOnceIfMissing: 1

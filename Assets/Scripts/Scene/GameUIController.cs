@@ -1,41 +1,57 @@
 using UnityEngine;
-using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
+using static System.Net.Mime.MediaTypeNames;
 
 public class GameUIController : MonoBehaviour
 {
+    public static GameUIController Instance { get; private set; }   // ★ 추가
+
     [Header("Game UI Elements")]
     [SerializeField] private GameObject pauseMenuPanel;
-    
+
     [Header("Pause Menu Buttons")]
     [SerializeField] private Button resumeButton;
     [SerializeField] private Button restartButton;
     [SerializeField] private Button titleButton;
     [SerializeField] private Button settingsButton;
     [SerializeField] private Button quitButton;
-    
+
     [Header("Settings")]
     [SerializeField] private GameObject settingsPanel;
-    
+
     [Header("Scene Names")]
     [SerializeField] private string titleSceneName = "Title";
     [SerializeField] private string currentSceneName;
-    
+
     private bool isPaused = false;
-    
+    public bool IsPaused => isPaused;   // ★ 외부에서 읽기용
+
     // 이벤트 - 다른 스크립트에서 구독할 수 있음
     public delegate void GameEvent();
     public static event GameEvent OnPlayerRespawnRequested;
-    
+
+    private void Awake()
+    {
+        // ★ 싱글톤 구성 (씬에 하나만)
+        if (Instance != null && Instance != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
+        Instance = this;
+        // DontDestroyOnLoad(gameObject); // 필요하면 씬 넘어가도 유지
+    }
+
     private void Start()
     {
         // 현재 씬 이름 저장
         currentSceneName = SceneManager.GetActiveScene().name;
-        
+
         // 초기 UI 설정
         if (pauseMenuPanel != null) pauseMenuPanel.SetActive(false);
         if (settingsPanel != null) settingsPanel.SetActive(false);
-        
+
         // 버튼 이벤트 연결
         if (resumeButton != null) resumeButton.onClick.AddListener(ResumeGame);
         if (restartButton != null) restartButton.onClick.AddListener(RestartGame);
@@ -43,33 +59,37 @@ public class GameUIController : MonoBehaviour
         if (settingsButton != null) settingsButton.onClick.AddListener(OpenSettings);
         if (quitButton != null) quitButton.onClick.AddListener(QuitGame);
     }
-    
+
     private void Update()
     {
+        // ★ 대화 중이면 ESC 입력 무시
+        if (DialogueManager.Instance != null && DialogueManager.Instance.IsDialogueActive)
+            return;
+
         // ESC 키로 일시정지 메뉴 토글
         if (Input.GetKeyDown(KeyCode.Escape))
         {
             TogglePauseMenu();
         }
     }
-    
+
     // ========================================
     // 일시정지 메뉴
     // ========================================
-    
+
     public void TogglePauseMenu()
     {
         isPaused = !isPaused;
-        
+
         if (pauseMenuPanel != null)
         {
             pauseMenuPanel.SetActive(isPaused);
         }
-        
+
         Time.timeScale = isPaused ? 0f : 1f;
         if (isPaused)
         {
-            Cursor.lockState = CursorLockMode.None;   /*[변경가능_일시정즘_커서상태]*/
+            Cursor.lockState = CursorLockMode.None;   /*[변경가능_일시정지_커서상태]*/
             Cursor.visible = true;                    /*[변경가능_일시정지_커서표시]*/
         }
         else
@@ -78,7 +98,7 @@ public class GameUIController : MonoBehaviour
             Cursor.visible = false;                   /*[변경가능_플레이중_커서표시]*/
         }
     }
-    
+
     public void ResumeGame()
     {
         isPaused = false;
@@ -87,7 +107,7 @@ public class GameUIController : MonoBehaviour
         Cursor.lockState = CursorLockMode.Locked; /*[변경가능_플레이중_커서상태]*/
         Cursor.visible = false;                   /*[변경가능_플레이중_커서표시]*/
     }
-    
+
     public void RestartGame()
     {
         isPaused = false;
@@ -97,17 +117,19 @@ public class GameUIController : MonoBehaviour
         Cursor.visible = false;                   /*[변경가능_플레이중_커서표시]*/
         OnPlayerRespawnRequested?.Invoke();
     }
-    
+
     public void ReturnToTitle()
     {
         Time.timeScale = 1f;
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
         SceneManager.LoadScene(titleSceneName);
     }
-    
+
     // ========================================
     // 설정
     // ========================================
-    
+
     public void OpenSettings()
     {
         // 게임 메뉴(일시정지 패널)는 끄고
@@ -132,10 +154,10 @@ public class GameUIController : MonoBehaviour
 
     public void QuitGame()
     {
-        #if UNITY_EDITOR
+#if UNITY_EDITOR
         UnityEditor.EditorApplication.isPlaying = false;
-        #else
-        Application.Quit();
-        #endif
+#else
+        UnityEngine.Application.Quit();
+#endif
     }
 }

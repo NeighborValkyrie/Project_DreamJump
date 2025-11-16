@@ -1,4 +1,4 @@
-// CollectibleManager.cs
+ï»¿// CollectibleManager.cs
 using UnityEngine;
 
 public class CollectibleManager : MonoBehaviour
@@ -10,10 +10,10 @@ public class CollectibleManager : MonoBehaviour
     [SerializeField] int star;
     [SerializeField] int key;
 
-    // UI°¡ ±¸µ¶
+    // UIê°€ êµ¬ë…
     public System.Action OnChanged;
 
-    // ÀúÀå Å°(¿øÇÏ¸é ºñÈ°¼ºÈ­ °¡´É)
+    // ì €ì¥ í‚¤(ì›í•˜ë©´ ë¹„í™œì„±í™” ê°€ëŠ¥)
     const string K_COIN = "collect.coin";
     const string K_STAR = "collect.star";
     const string K_KEY = "collect.key";
@@ -30,10 +30,26 @@ public class CollectibleManager : MonoBehaviour
         Notify();
     }
 
-    public void AddCoin(int amt = 1) { coin += Mathf.Max(0, amt); Save(); Notify(); }
-    public void AddStar(int amt = 1) { star += Mathf.Max(0, amt); Save(); Notify(); }
-    public void AddKey(int amt = 1) { key += Mathf.Max(0, amt); Save(); Notify(); }
+    public void AddCoin(int amt = 1)
+    {
+        coin = Mathf.Max(0, coin + amt);   // ğŸ”¸ deltaë¥¼ ë”í•œ ë’¤ 0 ì•„ë˜ë¡œë§Œ ì•ˆ ë–¨ì–´ì§€ê²Œ
+        Save();
+        Notify();
+    }
 
+    public void AddStar(int amt = 1)
+    {
+        star = Mathf.Max(0, star + amt);
+        Save();
+        Notify();
+    }
+
+    public void AddKey(int amt = 1)
+    {
+        key = Mathf.Max(0, key + amt);
+        Save();
+        Notify();
+    }
     public int GetCoin() => coin;
     public int GetStar() => star;
     public int GetKey() => key;
